@@ -1,4 +1,3 @@
-
 // Max area 
 var maxAoiArea = 8e11; 
 var aoiArea = null;  
@@ -453,11 +452,18 @@ rightMap.add(rightMapDrawLabel);
 var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul","Aug", "Sep", "Oct", "Nov", "Dec"];
 var maps = []
 ui.Panel.Layout.flow('horizontal',true)
+var date = ee.Date(dateInfo.left.selected)
 for (var i = 0; i<12; i++){
   var map = ui.Map().setControlVisibility(false)
   map.style().set('width', '400px');
   map.style().set('height', '400px');
   // map.addLayer(composite, vis[label])
+  var leftImg = compositeImages(ee.Date(dateInfo.left.selected));
+  
+  date.update({
+    month: date.advance(i,'month'),
+  })
+  map.layers().set(0, ui.Map.Layer(leftImg, thisData.visParams, null, true, 0.55)); 
   map.add(ui.Label(months[i]))
   maps.push(map)
 }
@@ -474,9 +480,22 @@ var linker = ui.Map.Linker(maps);
 // Get the initial AOI from the url parameter. 
 var swipeStatus = ui.url.get('swipe', false); 
 ui.url.set('swipe', swipeStatus);  
+
+var leftLinker = []
+var rightLinker = []
+
+for (var i = 0; i<12; i++){
+  if (i<6){
+    leftLinker.push(linker.get(i))
+  }
+  else{
+    rightLinker.push(linker.get(i))
+  }
+}
+
 var sliderPanel = ui.SplitPanel({ 
-  firstPanel: linker.get(0), 
-  secondPanel: linker.get(1), 
+  firstPanel: ui.Panel(leftLinker), 
+  secondPanel: ui.Panel(rightLinker), 
   orientation: 'horizontal', 
   wipe: swipeStatus, 
   style: {stretch: 'both'} 
@@ -683,7 +702,7 @@ leftMap.onChangeBounds(function(e) {
   ui.url.set('zoom', e.zoom); 
 });  
 // center aoi. 
-leftMap.centerObject(ee.Geometry(JSON.parse(center)), parseInt(zoom));  
+// leftMap.centerObject(ee.Geometry(JSON.parse(center)), parseInt(zoom));  
  
 // ############################################################################# 
 // ### INITIALIZE MAP DATA ### 
@@ -1425,5 +1444,3 @@ return [
   } 
 ]; 
 }  
-
-  
