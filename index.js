@@ -253,7 +253,7 @@ var infoPanel = ui.Panel({style: {width: '27%'}});
 // Create an introduction panel. 
 var intro = ui.Panel([ 
   ui.Label({ 
-    value: 'Nome a ser decidido', 
+    value: 'GAMBAR', 
     style: {fontSize: '24px', fontWeight: 'bold'} 
   }), 
   ui.Label('An application to visualize air pollutant time series data.') 
@@ -262,16 +262,16 @@ var intro = ui.Panel([
 var leftSliderDate = ui.DateSlider({ 
   start: '2020-01-01', 
   end: '2020-02-01', 
-  value: '2020-01-15', 
-  period: 1, 
+  value: '2020-01-01', 
+  period: 365, 
   style: {stretch: 'horizontal', shown: true}}); 
 leftSliderDate.setDisabled(true); 
    
 var rightSliderDate = ui.DateSlider({ 
   start: '2020-01-01', 
   end: '2020-02-01', 
-  value: '2020-01-15', 
-  period: 1, 
+  value: '2020-01-01', 
+  period: 365, 
   style: {stretch: 'horizontal', shown: true}}); 
 rightSliderDate.setDisabled(true);  
  
@@ -282,14 +282,14 @@ var dataSelectPanel = ui.Panel({
 var dateSliderLabelWidth = '45px'; 
 var cloudFracSlider = ui.Slider({min: 0, max: 100, value: cloudPct, step: 1, style: {stretch: 'horizontal'}}); 
 cloudFracSlider.setDisabled(true); 
-var leftDateLabel = ui.Label({value: 'LEFT:', style: {width: dateSliderLabelWidth, color: '000', fontWeight: 'bold', padding: '25px 0px 0px 0px'}}); 
+var leftDateLabel = ui.Label({value: 'Initial Date:', style: {width: dateSliderLabelWidth, color: '000', fontWeight: 'bold', padding: '25px 0px 0px 0px'}}); 
 var leftDatePanel = ui.Panel({ 
   widgets: [leftDateLabel, leftSliderDate], 
   layout: ui.Panel.Layout.flow('horizontal'), 
   style: {stretch: 'horizontal'} 
 }); 
 
-var rightDateLabel = ui.Label({value: 'RIGHT:', style: {width: dateSliderLabelWidth, color: '000', fontWeight: 'bold', padding: '25px 0px 0px 0px'}}); 
+var rightDateLabel = ui.Label({value: 'Final Date:', style: {width: dateSliderLabelWidth, color: '000', fontWeight: 'bold', padding: '25px 0px 0px 0px'}}); 
 var rightDatePanel = ui.Panel({ 
   widgets: [rightDateLabel, rightSliderDate], 
   layout: ui.Panel.Layout.flow('horizontal'), 
@@ -330,11 +330,9 @@ var mapComparison = ui.Panel([
     value: 'Map Comparison', 
     style: {fontSize: '20px', fontWeight: 'bold'} 
   }), 
-  ui.Label({value: '1. Select a dataset:'}), 
+  ui.Label({value: '1. Gas:'}), 
   dataSelectPanel, 
-  ui.Label({value: '2. Select max cloud allowance (percent/pixel):'}), 
-  cloudFracSlider, 
-  ui.Label({value: '3. Select map dates:'}), 
+  ui.Label({value: '2. Dates:'}), 
   leftDatePanel, 
   rightDatePanel, 
   ui.Label({value: '4. Adjust palette stretch:'}), 
@@ -357,11 +355,13 @@ function dataSelectorHandler(e) {
   thisData = dataInfo[datasetFromClick]; 
   thisData.colId = thisData[dataTypeFromClick]; 
    
-  if(thisData.cloudBand !== '') { 
-    cloudFracSlider.setDisabled(false); 
-  } else { 
-    cloudFracSlider.setDisabled(true); 
-  } 
+  // if(thisData.cloudBand !== '') { 
+  //   cloudFracSlider.setDisabled(false); 
+  // } else { 
+  //   cloudFracSlider.setDisabled(true); 
+  // } 
+   
+  thisData.cloudBand = 5;
    
   // Deal with the stretch 
   var minVis = ui.Slider({ 
@@ -562,7 +562,7 @@ function updateLeftSliderDate() {
       start: dates.firstDate, 
       end: dates.lastDate, 
       value: dates.selectedDate, 
-      period: 1, 
+      period: 365, 
       style: {stretch: 'horizontal'}, 
       onChange: leftDateHandler 
     }); 
@@ -608,7 +608,7 @@ function updateRightSliderDate() {
       start: dates.firstDate, 
       end: dates.lastDate, 
       value: dates.selectedDate, 
-      period: 1, 
+      period: 365, 
       style: {stretch: 'horizontal'}, 
       onChange: rightDateHandler 
     }); 
