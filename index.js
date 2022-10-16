@@ -389,8 +389,9 @@ function dataSelectorHandler(e) {
   ui.url.set('max', thisData.visParams.max); 
    
   // Update map data 
-  updateLeftSliderDate(); 
-  updateRightSliderDate();  
+  // updateLeftSliderDate(); 
+  // updateRightSliderDate();  
+  updateMaps();
   // Update legend elements 
   makeLegend();  
   aoi.area(1000).evaluate(function(area) { 
@@ -418,10 +419,11 @@ function maskClouds(img) {
   return img.updateMask(cloudMask); 
 }  
 function compositeImages(targetDate) { 
-  var startDate = targetDate.advance(-4, 'day'); // -3 
-  var endDate = targetDate.advance(5, 'day'); // 4 
+  var startDate = targetDate
+  var endDate = targetDate.advance(1, 'month'); // 4 
   //var startDate = targetDate.advance(-8, 'day'); // -3 
   //var endDate = targetDate.advance(1, 'day'); // 4 
+  print('datas doidas',startDate,endDate)
   var dateFilter = ee.Filter.date(startDate, endDate); 
   var col = ee.ImageCollection(thisData.colId).filter(dateFilter);  
   if(thisData.cloudBand !== '') { 
@@ -458,12 +460,13 @@ for (var i = 0; i<12; i++){
   map.style().set('width', '400px');
   map.style().set('height', '400px');
   // map.addLayer(composite, vis[label])
-  var leftImg = compositeImages(ee.Date(dateInfo.left.selected));
+  var img = compositeImages(date);
   
-  date.update({
-    month: date.advance(i,'month'),
+  date = date.update({
+    month: date.advance(i,'month').get("month"),
   })
-  map.layers().set(0, ui.Map.Layer(leftImg, thisData.visParams, null, true, 0.55)); 
+ 
+  map.layers().set(0, ui.Map.Layer(img, thisData.visParams, null, true, 0.55)); 
   map.add(ui.Label(months[i]))
   maps.push(map)
 }
@@ -526,8 +529,9 @@ function updateCloudFracSlider(val) {
   cloudPct = val; 
   ui.url.set('cloud', val); 
   cloudFrac = cloudPct/100; 
-  updateLeftSliderDate(); 
-  updateRightSliderDate(); 
+  // updateLeftSliderDate(); 
+  // updateRightSliderDate(); 
+  updateMaps();
   aoi.area(1000).evaluate(function(area) { 
     aoiArea = area; 
     if(area > maxAoiArea){ 
@@ -544,6 +548,71 @@ function updateCloudFracSlider(val) {
   }); 
 } 
 cloudFracSlider.onChange(updateCloudFracSlider);  
+ 
+ function updateMaps() {
+   leftDatePanel.widgets().get(1).setDisabled(true);  
+  leftLabel.style().set({shown: false}); 
+   
+  var dateRange = getMinMaxDate(); 
+  var firstDate = ee.Date(dateRange.get('firstDate')); 
+  var firstDateMillis = ee.Date(dateRange.get('firstDate')).millis(); 
+  var lastDate = ee.Date(dateRange.get('lastDate')); 
+  var lastDateMillis = ee.Date(dateRange.get('lastDate')).millis(); 
+  var selectedDate = ee.Date(dateInfo.left.selected); 
+  var selectedDateMillis = ee.Date(dateInfo.left.selected).millis(); 
+  selectedDate = ee.Date(ee.Algorithms.If( 
+    firstDateMillis.gt(selectedDateMillis), 
+    firstDate, 
+    selectedDate 
+  )); 
+  selectedDate = ee.Date(ee.Algorithms.If( 
+    lastDateMillis.lt(selectedDateMillis), 
+    lastDate, 
+    selectedDate 
+  ));
+  
+  ee.Dictionary({ 
+    firstDate: firstDate.format('YYYY-MM-dd'), 
+    lastDate: lastDate.format('YYYY-MM-dd'), 
+    selectedDate: selectedDate.format('YYYY-MM-dd') 
+  }) 
+  .evaluate(function(dates){ 
+    var dateSelector = ui.DateSlider({ 
+      start: dates.firstDate, 
+      end: dates.lastDate, 
+      value: dates.selectedDate, 
+      period: 365, 
+      style: {stretch: 'horizontal'}, 
+      onChange: leftDateHandler 
+    }); 
+    leftDatePanel.widgets().set(1, dateSelector); 
+    leftLabel.setValue(dates.selectedDate); 
+    leftLabel.style().set({shown: true}); 
+    drawChart(); 
+  }); 
+   
+   
+  maps = []
+  var img;
+  var date = selectedDate
+  
+for (var i = 0; i<12; i++){
+  var map = ui.Map().setControlVisibility(false)
+  map.style().set('width', '400px');
+  map.style().set('height', '400px');
+  // map.addLayer(composite, vis[label])
+  
+  leftMap.layers().set(0, ui.Map.Layer(img, thisData.visParams, null, true, 0.55)); 
+  img = compositeImages(date);
+  
+  date = date.update({
+    month: date.advance(i,'month').get("month"),
+  })
+  map.layers().set(0, ui.Map.Layer(img, thisData.visParams, null, true, 0.55)); 
+  map.add(ui.Label(months[i]))
+  maps.push(map)
+}
+ }
  
 // This needs to be run on load and each time a dataset changes. 
 function updateLeftSliderDate() { 
@@ -713,11 +782,12 @@ leftMap.addLayer(blankImg);
 rightMap.addLayer(blankImg); 
 leftMap.add(leftLabel); 
 rightMap.add(rightLabel);  
-if(thisData.cloudBand !== '') { 
-  cloudFracSlider.setDisabled(false); 
-} 
-updateLeftSliderDate(); 
-updateRightSliderDate();  
+// if(thisData.cloudBand !== '') { 
+//   cloudFracSlider.setDisabled(false); 
+// } 
+// updateLeftSliderDate(); 
+// updateRightSliderDate();  
+updateMaps();
   
 // ############################################################################# 
 // ### CHART DATA ### 
