@@ -1,3 +1,14 @@
+function getYears2018ToNow(){
+  var i = 2018;
+  var anoFinal = parseInt(new Date().getFullYear());
+  var anos = [];
+  while (i <= anoFinal ) {
+    anos.push(i.toString());
+    i++;
+  } 
+  return anos;
+}
+
 // Max area 
 var maxAoiArea = 8e11; 
 var aoiArea = null;  
@@ -288,6 +299,17 @@ var leftDatePanel = ui.Panel({
   style: {stretch: 'horizontal'} 
 }); 
 
+var selectYearLabel = ui.Label({value: 'Select year:'});
+var selectYearSelect = ui.Select({
+  items: getYears2018ToNow(),
+  style: {width: '200px'},
+});
+var selectYearPanel = ui.Panel({
+  widgets: [selectYearLabel, selectYearSelect],
+  layout: ui.Panel.Layout.flow('horizontal'), 
+  style: {stretch: 'horizontal'} 
+})
+
 var rightDateLabel = ui.Label({value: 'Final Date:', style: {width: dateSliderLabelWidth, color: '000', fontWeight: 'bold', padding: '25px 0px 0px 0px'}}); 
 var rightDatePanel = ui.Panel({ 
   widgets: [rightDateLabel, rightSliderDate], 
@@ -332,8 +354,9 @@ var mapComparison = ui.Panel([
   ui.Label({value: '1. Gas:'}), 
   dataSelectPanel, 
   ui.Label({value: '2. Dates:'}), 
-  leftDatePanel, 
-  rightDatePanel, 
+  selectYearPanel,
+  // leftDatePanel,
+  // rightDatePanel,
   ui.Label({value: '4. Adjust palette stretch:'}), 
   stretchPanel, 
   ui.Label('[legend]'), 
@@ -423,7 +446,6 @@ function compositeImages(targetDate) {
   var endDate = targetDate.advance(1, 'month'); // 4 
   //var startDate = targetDate.advance(-8, 'day'); // -3 
   //var endDate = targetDate.advance(1, 'day'); // 4 
-  print('datas doidas',startDate,endDate)
   var dateFilter = ee.Filter.date(startDate, endDate); 
   var col = ee.ImageCollection(thisData.colId).filter(dateFilter);  
   if(thisData.cloudBand !== '') { 
