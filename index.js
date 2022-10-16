@@ -1,5 +1,5 @@
-function getYears2018ToNow(){
-  var i = 2018;
+function getYears2019ToNow(){
+  var i = 2019;
   var anoFinal = parseInt(new Date().getFullYear());
   var anos = [];
   while (i <= anoFinal ) {
@@ -299,11 +299,22 @@ var leftDatePanel = ui.Panel({
   style: {stretch: 'horizontal'} 
 }); 
 
+var selectedYear = 2019;
+function changeSelectedYearSelect() {
+  if(selectYearSelect !== undefined){
+    selectedYear = selectYearSelect.getValue()
+    updateMaps();
+  }
+}
+
 var selectYearLabel = ui.Label({value: 'Select year:'});
 var selectYearSelect = ui.Select({
-  items: getYears2018ToNow(),
+  value: "2019",
+  items: getYears2019ToNow(),
   style: {width: '200px'},
+  onChange: changeSelectedYearSelect
 });
+
 var selectYearPanel = ui.Panel({
   widgets: [selectYearLabel, selectYearSelect],
   layout: ui.Panel.Layout.flow('horizontal'), 
@@ -475,8 +486,10 @@ rightMap.add(rightMapDrawLabel);
 // Set map properties 
 var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul","Aug", "Sep", "Oct", "Nov", "Dec"];
 var maps = []
+
 ui.Panel.Layout.flow('horizontal',true)
-var date = ee.Date(dateInfo.left.selected)
+var date = ee.Date.fromYMD(selectedYear,01,01)
+
 for (var i = 0; i<12; i++){
   var map = ui.Map().setControlVisibility(false)
   map.style().set('width', '400px');
@@ -484,13 +497,12 @@ for (var i = 0; i<12; i++){
   // map.addLayer(composite, vis[label])
   var img = compositeImages(date);
   
-  date = date.update({
-    month: date.advance(i,'month').get("month"),
-  })
- 
   map.layers().set(0, ui.Map.Layer(img, thisData.visParams, null, true, 0.55)); 
   map.add(ui.Label(months[i]))
   maps.push(map)
+  date = date.update({
+    month: date.advance(1,'month').get("month"),
+  })
 }
 
 leftMap.setControlVisibility({layerList: false, zoomControl: false, fullscreenControl: false}); 
@@ -572,68 +584,18 @@ function updateCloudFracSlider(val) {
 cloudFracSlider.onChange(updateCloudFracSlider);  
  
  function updateMaps() {
-   leftDatePanel.widgets().get(1).setDisabled(true);  
-  leftLabel.style().set({shown: false}); 
-   
-  var dateRange = getMinMaxDate(); 
-  var firstDate = ee.Date(dateRange.get('firstDate')); 
-  var firstDateMillis = ee.Date(dateRange.get('firstDate')).millis(); 
-  var lastDate = ee.Date(dateRange.get('lastDate')); 
-  var lastDateMillis = ee.Date(dateRange.get('lastDate')).millis(); 
-  var selectedDate = ee.Date(dateInfo.left.selected); 
-  var selectedDateMillis = ee.Date(dateInfo.left.selected).millis(); 
-  selectedDate = ee.Date(ee.Algorithms.If( 
-    firstDateMillis.gt(selectedDateMillis), 
-    firstDate, 
-    selectedDate 
-  )); 
-  selectedDate = ee.Date(ee.Algorithms.If( 
-    lastDateMillis.lt(selectedDateMillis), 
-    lastDate, 
-    selectedDate 
-  ));
+  var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul","Aug", "Sep", "Oct", "Nov", "Dec"];
   
-  ee.Dictionary({ 
-    firstDate: firstDate.format('YYYY-MM-dd'), 
-    lastDate: lastDate.format('YYYY-MM-dd'), 
-    selectedDate: selectedDate.format('YYYY-MM-dd') 
-  }) 
-  .evaluate(function(dates){ 
-    var dateSelector = ui.DateSlider({ 
-      start: dates.firstDate, 
-      end: dates.lastDate, 
-      value: dates.selectedDate, 
-      period: 365, 
-      style: {stretch: 'horizontal'}, 
-      onChange: leftDateHandler 
-    }); 
-    leftDatePanel.widgets().set(1, dateSelector); 
-    leftLabel.setValue(dates.selectedDate); 
-    leftLabel.style().set({shown: true}); 
-    drawChart(); 
-  }); 
-   
-   
-  maps = []
-  var img;
-  var date = selectedDate
+  var date = ee.Date.fromYMD(parseInt(selectedYear),01,01)
   
-for (var i = 0; i<12; i++){
-  var map = ui.Map().setControlVisibility(false)
-  map.style().set('width', '400px');
-  map.style().set('height', '400px');
-  // map.addLayer(composite, vis[label])
+  for (var i = 0; i<12; i++){
+    var img = compositeImages(date);
+    maps[i].layers().set(0, ui.Map.Layer(img, thisData.visParams, null, true, 0.55));
+    date = date.update({
+      month: date.advance(1,'month').get("month"),
+   })
+  }
   
-  leftMap.layers().set(0, ui.Map.Layer(img, thisData.visParams, null, true, 0.55)); 
-  img = compositeImages(date);
-  
-  date = date.update({
-    month: date.advance(i,'month').get("month"),
-  })
-  map.layers().set(0, ui.Map.Layer(img, thisData.visParams, null, true, 0.55)); 
-  map.add(ui.Label(months[i]))
-  maps.push(map)
-}
  }
  
 // This needs to be run on load and each time a dataset changes. 
