@@ -483,7 +483,11 @@ var rightMapDrawLabel = ui.Label({value: 'Drawing disabled on this side',
   style: {color: 'EE605E', position: 'top-right', backgroundColor: 'rgba(255, 255, 255, 1.0)'}}) 
 rightMap.add(rightMapDrawLabel);  
   
-// Set map properties 
+//Create big map
+var bigMap = ui.Map()
+print(bigMap)
+  
+// Set 12 maps
 var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul","Aug", "Sep", "Oct", "Nov", "Dec"];
 var maps = []
 
@@ -492,8 +496,9 @@ var date = ee.Date.fromYMD(selectedYear,01,01)
 
 for (var i = 0; i<12; i++){
   var map = ui.Map().setControlVisibility(false)
-  map.style().set('width', '400px');
-  map.style().set('height', '400px');
+  map.style().set('width', '300px');
+  map.style().set('height', '300px');
+  map.style().set('margin', '16px');
   // map.addLayer(composite, vis[label])
   var img = compositeImages(date);
   
@@ -518,27 +523,22 @@ var linker = ui.Map.Linker(maps);
 var swipeStatus = ui.url.get('swipe', false); 
 ui.url.set('swipe', swipeStatus);  
 
-var leftLinker = []
-var rightLinker = []
+var linkerMaps = []
 
 for (var i = 0; i<12; i++){
-  if (i<6){
-    leftLinker.push(linker.get(i))
-  }
-  else{
-    rightLinker.push(linker.get(i))
-  }
+  linkerMaps.push(linker.get(i))
 }
 
-var sliderPanel = ui.SplitPanel({ 
-  firstPanel: ui.Panel(leftLinker), 
-  secondPanel: ui.Panel(rightLinker), 
-  orientation: 'horizontal', 
-  wipe: swipeStatus, 
-  style: {stretch: 'both'} 
-});  
-  
- 
+var mapsPanel = ui.Panel({
+  layout: ui.Panel.Layout.flow('horizontal',true),
+  style: {stretch :"both", width:"100%"},
+})
+// mapsPanel.Layout.flow("horizontal",true)
+for(var i = 0; i<linkerMaps.length;i++){
+mapsPanel.add(linkerMaps[i])
+}
+
+
 var swipeButtonLabel = 'Show swipe display'; 
 if(swipeStatus) { 
   swipeButtonLabel = 'Show side-by-side display'; 
@@ -738,17 +738,17 @@ drawingToolsRight.layers().get(0).setLocked(true);
 // ############################################################################# 
 // ### SETUP APP DISPLAY ### 
 // #############################################################################  
- 
 var mapChartSplitPanel = ui.Panel(ui.SplitPanel({ 
-  firstPanel: ui.Panel(sliderPanel, null, {height: '62%'}), // 
-  secondPanel: tsChart, 
+  firstPanel: ui.Panel(ui.Map(),null,{height: '60%'}), 
+  secondPanel: ui.Panel(mapsPanel, null,{stretch :"horizontal", width:"600px"}), // 
   orientation: 'vertical', 
   wipe: false, 
 }));  
+
 // Make the info panel and slider panel split. 
 var splitPanel = ui.SplitPanel(infoPanel, mapChartSplitPanel);  
 // Set the SplitPanel as the only thing in root. 
-ui.root.widgets().reset([splitPanel]);  
+ui.root.widgets().reset([splitPanel]);
 // Set url params for map bounds. 
 leftMap.onChangeBounds(function(e) { 
   ui.url.set('center', ee.Geometry.Point(e.lon, e.lat).toGeoJSONString()); 
