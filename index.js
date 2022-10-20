@@ -176,7 +176,7 @@ dataSelector.set({placeholder: datasetUrl, value: datasetUrl});
 // thisData.colId = thisData[dataTypeUrl]; 
 // colSelector.set({placeholder: dataTypeUrl, value: dataTypeUrl});  
 // Get initial map bounds from the url parameter. 
-var initPoint = ee.Geometry.Point(9.502, 45.566).toGeoJSONString(); 
+var initPoint = ee.Geometry.Point(-61.479492, -3.732708).toGeoJSONString(); 
 var center = ui.url.get('center', initPoint); 
 // ui.url.set('center', dataTypeUrl); 
 var zoom = ui.url.get('zoom', '4'); 
@@ -484,8 +484,9 @@ var rightMapDrawLabel = ui.Label({value: 'Drawing disabled on this side',
 rightMap.add(rightMapDrawLabel);  
   
 //Create big map
-var bigMap = ui.Map()
-print(bigMap)
+var bigMap = ui.Map({
+  center: {lat: -3.732708 , lon:-61.479492, zoom: 4.5}
+})
   
 // Set 12 maps
 var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul","Aug", "Sep", "Oct", "Nov", "Dec"];
@@ -504,6 +505,7 @@ for (var i = 0; i<12; i++){
   
   map.layers().set(0, ui.Map.Layer(img, thisData.visParams, null, true, 0.55)); 
   map.add(ui.Label(months[i]))
+  map.setCenter(-61.479492 ,-3.732708)
   maps.push(map)
   date = date.update({
     month: date.advance(1,'month').get("month"),
@@ -739,7 +741,7 @@ drawingToolsRight.layers().get(0).setLocked(true);
 // ### SETUP APP DISPLAY ### 
 // #############################################################################  
 var mapChartSplitPanel = ui.Panel(ui.SplitPanel({ 
-  firstPanel: ui.Panel(ui.Map(),null,{height: '60%'}), 
+  firstPanel: ui.Panel(bigMap,null,{height: '60%'}), 
   secondPanel: ui.Panel(mapsPanel, null,{stretch :"horizontal", width:"600px"}), // 
   orientation: 'vertical', 
   wipe: false, 
