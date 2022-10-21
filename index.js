@@ -264,16 +264,16 @@ var infoPanel = ui.Panel({style: {width: '27%'}});
 var intro = ui.Panel([ 
   ui.Label({ 
     value: 'GAMBAR', 
-    style: {fontSize: '24px', fontWeight: 'bold'} 
+    style: {fontSize: '32px', fontWeight: 'bold'} 
   }), 
   ui.Label('An application to visualize air pollutant time series data.') 
 ]);  
  
 var leftSliderDate = ui.DateSlider({ 
-  start: '2020-01-01', 
-  end: '2020-02-01', 
+  start: '2015-01-01', 
+  end: ee.Date(), 
   value: '2020-01-01', 
-  period: 365, 
+  period: 1, 
   style: {stretch: 'horizontal', shown: true}}); 
 leftSliderDate.setDisabled(true); 
    
@@ -281,7 +281,7 @@ var rightSliderDate = ui.DateSlider({
   start: '2020-01-01', 
   end: '2020-02-01', 
   value: '2020-01-01', 
-  period: 365, 
+  period: 1, 
   style: {stretch: 'horizontal', shown: true}}); 
 rightSliderDate.setDisabled(true);  
  
@@ -292,7 +292,7 @@ var dataSelectPanel = ui.Panel({
 var dateSliderLabelWidth = '45px'; 
 var cloudFracSlider = ui.Slider({min: 0, max: 100, value: cloudPct, step: 1, style: {stretch: 'horizontal'}}); 
 cloudFracSlider.setDisabled(true); 
-var leftDateLabel = ui.Label({value: 'Initial Date:', style: {width: dateSliderLabelWidth, color: '000', fontWeight: 'bold', padding: '25px 0px 0px 0px'}}); 
+var leftDateLabel = ui.Label({value: 'Initial Date:', style: {width: dateSliderLabelWidth, color: '000', padding: '25px 0px 0px 0px'}}); 
 var leftDatePanel = ui.Panel({ 
   widgets: [leftDateLabel, leftSliderDate], 
   layout: ui.Panel.Layout.flow('horizontal'), 
@@ -321,7 +321,7 @@ var selectYearPanel = ui.Panel({
   style: {stretch: 'horizontal'} 
 })
 
-var rightDateLabel = ui.Label({value: 'Final Date:', style: {width: dateSliderLabelWidth, color: '000', fontWeight: 'bold', padding: '25px 0px 0px 0px'}}); 
+var rightDateLabel = ui.Label({value: 'Final Date:', style: {width: dateSliderLabelWidth, color: '000', padding: '25px 0px 0px 0px'}}); 
 var rightDatePanel = ui.Panel({ 
   widgets: [rightDateLabel, rightSliderDate], 
   layout: ui.Panel.Layout.flow('horizontal'), 
@@ -360,14 +360,14 @@ var swipeSwitchIndex = 11;
 var mapComparison = ui.Panel([ 
   ui.Label({ 
     value: 'Map Comparison', 
-    style: {fontSize: '20px', fontWeight: 'bold'} 
+    style: {fontSize: '24px', fontWeight: 'bold'} 
   }), 
-  ui.Label({value: '1. Gas:'}), 
+  ui.Label({value: '1. Gas:', style: {fontWeight: 'bold', fontSize: '18px'}}), 
   dataSelectPanel, 
-  ui.Label({value: '2. Dates:'}), 
-  selectYearPanel,
-  // leftDatePanel,
-  // rightDatePanel,
+  ui.Label({value: '2. Dates:', style: {fontWeight: 'bold', fontSize: '18px'}}), 
+  // selectYearPanel,
+  leftDatePanel,
+  rightDatePanel,
   ui.Label({value: '4. Adjust palette stretch:'}), 
   stretchPanel, 
   ui.Label('[legend]'), 
@@ -1499,4 +1499,4 @@ return [
     ] 
   } 
 ]; 
-}  
+} 
