@@ -1,3 +1,13 @@
+function getYears2019ToNow(){
+  var i = 2019;
+  var anoFinal = parseInt(new Date().getFullYear());
+  var anos = [];
+  while (i <= anoFinal ) {
+    anos.push(i.toString());
+    i++;
+  } 
+  return anos;
+}
 
 // Max area 
 var maxAoiArea = 8e11; 
@@ -155,6 +165,9 @@ var dataSelector = ui.Select({
   items: Object.keys(dataInfo) 
 });  
 
+var btnRun = ui.Button('Run', updateMaps, false, {width: '100%', padding: '20px 20px 0px 0px'}, null);
+var cbxMedia = ui.Checkbox('Show average (Dates)', false, null, false, null);
+
 // Get data information - used globally in functions. 
 var datasetUrl = ui.url.get('dataset', 'Nitrogen dioxide'); 
 ui.url.set('dataset', datasetUrl); // need to set incase this is the initial load. 
@@ -166,7 +179,7 @@ dataSelector.set({placeholder: datasetUrl, value: datasetUrl});
 // thisData.colId = thisData[dataTypeUrl]; 
 // colSelector.set({placeholder: dataTypeUrl, value: dataTypeUrl});  
 // Get initial map bounds from the url parameter. 
-var initPoint = ee.Geometry.Point(9.502, 45.566).toGeoJSONString(); 
+var initPoint = ee.Geometry.Point(-61.479492, -3.732708).toGeoJSONString(); 
 var center = ui.url.get('center', initPoint); 
 // ui.url.set('center', dataTypeUrl); 
 var zoom = ui.url.get('zoom', '4'); 
@@ -254,26 +267,26 @@ var infoPanel = ui.Panel({style: {width: '27%'}});
 var intro = ui.Panel([ 
   ui.Label({ 
     value: 'GAMBAR', 
-    style: {fontSize: '24px', fontWeight: 'bold'} 
+    style: {fontSize: '32px', fontWeight: 'bold'} 
   }), 
   ui.Label('An application to visualize air pollutant time series data.') 
 ]);  
  
 var leftSliderDate = ui.DateSlider({ 
-  start: '2020-01-01', 
-  end: '2020-02-01', 
+  start: '2010-01-01', 
+  end: new Date(), 
   value: '2020-01-01', 
-  period: 365, 
+  period: 1, 
   style: {stretch: 'horizontal', shown: true}}); 
-leftSliderDate.setDisabled(true); 
+leftSliderDate.setDisabled(false); 
    
 var rightSliderDate = ui.DateSlider({ 
-  start: '2020-01-01', 
-  end: '2020-02-01', 
+  start: '2010-01-01', 
+  end: new Date(), 
   value: '2020-01-01', 
-  period: 365, 
+  period: 1, 
   style: {stretch: 'horizontal', shown: true}}); 
-rightSliderDate.setDisabled(true);  
+rightSliderDate.setDisabled(false);  
  
 var dataSelectPanel = ui.Panel({ 
   widgets: [dataSelector], 
@@ -282,14 +295,36 @@ var dataSelectPanel = ui.Panel({
 var dateSliderLabelWidth = '45px'; 
 var cloudFracSlider = ui.Slider({min: 0, max: 100, value: cloudPct, step: 1, style: {stretch: 'horizontal'}}); 
 cloudFracSlider.setDisabled(true); 
-var leftDateLabel = ui.Label({value: 'Initial Date:', style: {width: dateSliderLabelWidth, color: '000', fontWeight: 'bold', padding: '25px 0px 0px 0px'}}); 
+var leftDateLabel = ui.Label({value: 'Initial Date:', style: {width: dateSliderLabelWidth, color: '000', padding: '25px 0px 0px 0px'}}); 
 var leftDatePanel = ui.Panel({ 
   widgets: [leftDateLabel, leftSliderDate], 
   layout: ui.Panel.Layout.flow('horizontal'), 
   style: {stretch: 'horizontal'} 
 }); 
 
-var rightDateLabel = ui.Label({value: 'Final Date:', style: {width: dateSliderLabelWidth, color: '000', fontWeight: 'bold', padding: '25px 0px 0px 0px'}}); 
+var selectedYear = 2019;
+function changeSelectedYearSelect() {
+  if(selectYearSelect !== undefined){
+    selectedYear = selectYearSelect.getValue()
+    updateMaps();
+  }
+}
+
+var selectYearLabel = ui.Label({value: 'Select year:'});
+var selectYearSelect = ui.Select({
+  value: "2019",
+  items: getYears2019ToNow(),
+  style: {width: '200px'},
+  onChange: changeSelectedYearSelect
+});
+
+var selectYearPanel = ui.Panel({
+  widgets: [selectYearLabel, selectYearSelect],
+  layout: ui.Panel.Layout.flow('horizontal'), 
+  style: {stretch: 'horizontal'} 
+})
+
+var rightDateLabel = ui.Label({value: 'Final Date:', style: {width: dateSliderLabelWidth, color: '000', padding: '25px 0px 0px 0px'}}); 
 var rightDatePanel = ui.Panel({ 
   widgets: [rightDateLabel, rightSliderDate], 
   layout: ui.Panel.Layout.flow('horizontal'), 
@@ -328,13 +363,16 @@ var swipeSwitchIndex = 11;
 var mapComparison = ui.Panel([ 
   ui.Label({ 
     value: 'Map Comparison', 
-    style: {fontSize: '20px', fontWeight: 'bold'} 
+    style: {fontSize: '24px', fontWeight: 'bold'} 
   }), 
-  ui.Label({value: '1. Gas:'}), 
+  ui.Label({value: '1. Gas:', style: {fontWeight: 'bold', fontSize: '18px'}}), 
   dataSelectPanel, 
-  ui.Label({value: '2. Dates:'}), 
-  leftDatePanel, 
-  rightDatePanel, 
+  ui.Label({value: '2. Dates:', style: {fontWeight: 'bold', fontSize: '18px'}}), 
+  // selectYearPanel,
+  leftDatePanel,
+  rightDatePanel,
+  //cbxMedia,
+  btnRun,
   ui.Label({value: '4. Adjust palette stretch:'}), 
   stretchPanel, 
   ui.Label('[legend]'), 
@@ -345,7 +383,8 @@ var mapComparison = ui.Panel([
 infoPanel.add(intro); 
 var panelBreak25 = ui.Panel(null, null, {stretch: 'horizontal', height: '1px', backgroundColor: '000', margin: '8px 0px 8px 0px'}); 
 infoPanel.add(panelBreak25); 
-infoPanel.add(mapComparison);  
+infoPanel.add(mapComparison);
+
 function dataSelectorHandler(e) { 
   var datasetFromClick = dataSelector.getValue(); 
   var dataTypeFromClick = "Offline"; 
@@ -390,8 +429,9 @@ function dataSelectorHandler(e) {
   ui.url.set('max', thisData.visParams.max); 
    
   // Update map data 
-  updateLeftSliderDate(); 
-  updateRightSliderDate();  
+  // updateLeftSliderDate(); 
+  // updateRightSliderDate();  
+  updateMaps();
   // Update legend elements 
   makeLegend();  
   aoi.area(1000).evaluate(function(area) { 
@@ -419,8 +459,8 @@ function maskClouds(img) {
   return img.updateMask(cloudMask); 
 }  
 function compositeImages(targetDate) { 
-  var startDate = targetDate.advance(-4, 'day'); // -3 
-  var endDate = targetDate.advance(5, 'day'); // 4 
+  var startDate = targetDate
+  var endDate = targetDate.advance(1, 'month'); // 4 
   //var startDate = targetDate.advance(-8, 'day'); // -3 
   //var endDate = targetDate.advance(1, 'day'); // 4 
   var dateFilter = ee.Filter.date(startDate, endDate); 
@@ -449,17 +489,33 @@ var rightMapDrawLabel = ui.Label({value: 'Drawing disabled on this side',
   style: {color: 'EE605E', position: 'top-right', backgroundColor: 'rgba(255, 255, 255, 1.0)'}}) 
 rightMap.add(rightMapDrawLabel);  
   
-// Set map properties 
+//Create big map
+var bigMap = ui.Map({
+  center: {lat: -3.732708 , lon:-61.479492, zoom: 4.5}
+})
+  
+// Set 12 maps
 var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul","Aug", "Sep", "Oct", "Nov", "Dec"];
 var maps = []
+
 ui.Panel.Layout.flow('horizontal',true)
+var date = ee.Date.fromYMD(selectedYear,01,01)
+
 for (var i = 0; i<12; i++){
   var map = ui.Map().setControlVisibility(false)
-  map.style().set('width', '400px');
-  map.style().set('height', '400px');
+  map.style().set('width', '300px');
+  map.style().set('height', '300px');
+  map.style().set('margin', '16px');
   // map.addLayer(composite, vis[label])
+  var img = compositeImages(date);
+  
+  map.layers().set(0, ui.Map.Layer(img, thisData.visParams, null, true, 0.55)); 
   map.add(ui.Label(months[i]))
+  map.setCenter(-61.479492 ,-3.732708)
   maps.push(map)
+  date = date.update({
+    month: date.advance(1,'month').get("month"),
+  })
 }
 
 leftMap.setControlVisibility({layerList: false, zoomControl: false, fullscreenControl: false}); 
@@ -474,15 +530,23 @@ var linker = ui.Map.Linker(maps);
 // Get the initial AOI from the url parameter. 
 var swipeStatus = ui.url.get('swipe', false); 
 ui.url.set('swipe', swipeStatus);  
-var sliderPanel = ui.SplitPanel({ 
-  firstPanel: linker.get(0), 
-  secondPanel: linker.get(1), 
-  orientation: 'horizontal', 
-  wipe: swipeStatus, 
-  style: {stretch: 'both'} 
-});  
-  
- 
+
+var linkerMaps = []
+
+for (var i = 0; i<12; i++){
+  linkerMaps.push(linker.get(i))
+}
+
+var mapsPanel = ui.Panel({
+  layout: ui.Panel.Layout.flow('horizontal',true),
+  style: {stretch :"both", width:"100%"},
+})
+// mapsPanel.Layout.flow("horizontal",true)
+for(var i = 0; i<linkerMaps.length;i++){
+mapsPanel.add(linkerMaps[i])
+}
+
+
 var swipeButtonLabel = 'Show swipe display'; 
 if(swipeStatus) { 
   swipeButtonLabel = 'Show side-by-side display'; 
@@ -507,8 +571,9 @@ function updateCloudFracSlider(val) {
   cloudPct = val; 
   ui.url.set('cloud', val); 
   cloudFrac = cloudPct/100; 
-  updateLeftSliderDate(); 
-  updateRightSliderDate(); 
+  // updateLeftSliderDate(); 
+  // updateRightSliderDate(); 
+  updateMaps();
   aoi.area(1000).evaluate(function(area) { 
     aoiArea = area; 
     if(area > maxAoiArea){ 
@@ -525,6 +590,28 @@ function updateCloudFracSlider(val) {
   }); 
 } 
 cloudFracSlider.onChange(updateCloudFracSlider);  
+ 
+ function updateMaps() {
+  var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul","Aug", "Sep", "Oct", "Nov", "Dec"];
+  
+  var initialDate = ee.Date.fromYMD(parseInt(leftSliderDate.get("month")),01,01);
+  var finalDate = ee.Date.fromYMD(parseInt(rightSliderDate.get("month")),01,01);
+  
+  print(initialDate);
+  print(finalDate);
+  
+  var date = initialDate;
+  
+  for (var i = initialDate; i<finalDate; i++){
+    var img = compositeImages(date);
+    print(img);
+    maps[i].layers().set(0, ui.Map.Layer(img, thisData.visParams, null, true, 0.55));
+    date = date.update({
+      month: date.advance(1,'month').get("month"),
+   })
+  }
+  
+ }
  
 // This needs to be run on load and each time a dataset changes. 
 function updateLeftSliderDate() { 
@@ -562,7 +649,7 @@ function updateLeftSliderDate() {
       start: dates.firstDate, 
       end: dates.lastDate, 
       value: dates.selectedDate, 
-      period: 365, 
+      period: 1, 
       style: {stretch: 'horizontal'}, 
       onChange: leftDateHandler 
     }); 
@@ -608,7 +695,7 @@ function updateRightSliderDate() {
       start: dates.firstDate, 
       end: dates.lastDate, 
       value: dates.selectedDate, 
-      period: 365, 
+      period: 1, 
       style: {stretch: 'horizontal'}, 
       onChange: rightDateHandler 
     }); 
@@ -666,24 +753,24 @@ drawingToolsRight.layers().get(0).setLocked(true);
 // ############################################################################# 
 // ### SETUP APP DISPLAY ### 
 // #############################################################################  
- 
 var mapChartSplitPanel = ui.Panel(ui.SplitPanel({ 
-  firstPanel: ui.Panel(sliderPanel, null, {height: '62%'}), // 
-  secondPanel: tsChart, 
+  firstPanel: ui.Panel(bigMap,null,{height: '60%'}), 
+  secondPanel: ui.Panel(mapsPanel, null,{stretch :"horizontal", width:"600px"}), // 
   orientation: 'vertical', 
   wipe: false, 
 }));  
+
 // Make the info panel and slider panel split. 
 var splitPanel = ui.SplitPanel(infoPanel, mapChartSplitPanel);  
 // Set the SplitPanel as the only thing in root. 
-ui.root.widgets().reset([splitPanel]);  
+ui.root.widgets().reset([splitPanel]);
 // Set url params for map bounds. 
 leftMap.onChangeBounds(function(e) { 
   ui.url.set('center', ee.Geometry.Point(e.lon, e.lat).toGeoJSONString()); 
   ui.url.set('zoom', e.zoom); 
 });  
 // center aoi. 
-leftMap.centerObject(ee.Geometry(JSON.parse(center)), parseInt(zoom));  
+// leftMap.centerObject(ee.Geometry(JSON.parse(center)), parseInt(zoom));  
  
 // ############################################################################# 
 // ### INITIALIZE MAP DATA ### 
@@ -694,11 +781,12 @@ leftMap.addLayer(blankImg);
 rightMap.addLayer(blankImg); 
 leftMap.add(leftLabel); 
 rightMap.add(rightLabel);  
-if(thisData.cloudBand !== '') { 
-  cloudFracSlider.setDisabled(false); 
-} 
-updateLeftSliderDate(); 
-updateRightSliderDate();  
+// if(thisData.cloudBand !== '') { 
+//   cloudFracSlider.setDisabled(false); 
+// } 
+// updateLeftSliderDate(); 
+// updateRightSliderDate();  
+updateMaps();
   
 // ############################################################################# 
 // ### CHART DATA ### 
@@ -1424,6 +1512,4 @@ return [
     ] 
   } 
 ]; 
-}  
-
-  
+} 
