@@ -302,7 +302,7 @@ var leftDatePanel = ui.Panel({
   style: {stretch: 'horizontal'} 
 }); 
 
-var selectedYear = 2019;
+var selectedYear = 2009;
 function changeSelectedYearSelect() {
   if(selectYearSelect !== undefined){
     selectedYear = selectYearSelect.getValue()
@@ -312,7 +312,7 @@ function changeSelectedYearSelect() {
 
 var selectYearLabel = ui.Label({value: 'Select year:'});
 var selectYearSelect = ui.Select({
-  value: "2019",
+  value: "2021",
   items: getYears2019ToNow(),
   style: {width: '200px'},
   onChange: changeSelectedYearSelect
@@ -594,21 +594,42 @@ cloudFracSlider.onChange(updateCloudFracSlider);
  function updateMaps() {
   var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul","Aug", "Sep", "Oct", "Nov", "Dec"];
   
-  var initialDate = ee.Date.fromYMD(parseInt(leftSliderDate.get("month")),01,01);
-  var finalDate = ee.Date.fromYMD(parseInt(rightSliderDate.get("month")),01,01);
+  var initialTotalDate = new Date(leftSliderDate.getValue()[1]);
+  var finalTotalDate = new Date(rightSliderDate.getValue()[1])
   
-  print(initialDate);
-  print(finalDate);
+  var initialYear = initialTotalDate.getFullYear();
+  var finalYear = finalTotalDate.getFullYear();
+  var initialMonth = initialTotalDate.getMonth() + 1;
+  var finalMonth = finalTotalDate.getMonth() + 1;
   
-  var date = initialDate;
   
-  for (var i = initialDate; i<finalDate; i++){
-    var img = compositeImages(date);
-    print(img);
-    maps[i].layers().set(0, ui.Map.Layer(img, thisData.visParams, null, true, 0.55));
-    date = date.update({
-      month: date.advance(1,'month').get("month"),
-   })
+  if(initialTotalDate < finalTotalDate){
+    alert("Start date must be greater than end date!")
+    return;
+  }
+  
+  if()
+  
+  print(initialMonth,initialYear)
+  print(finalMonth,finalYear)
+  
+  for (var i = initialYear; i<finalYear; i++){
+    print("TESTE")
+    for(var k = 0; k < 12; k++){
+      if((i !== initialYear) && (k >= initialMonth)){ //Caso o mes inicial for maior do que mes da iteracao, ele nao faz nada
+        print("entrei pra fazer media")
+        var img = compositeImages(date);
+        print(img);
+        maps[i].layers().set(0, ui.Map.Layer(img, thisData.visParams, null, true, 0.55));
+        date = date.update({
+          month: date.advance(1,'month').get("month"),
+       })
+      }
+       if((i === finalYear) && (k > finalMonth)){
+        print("vou sair!")
+        return;
+      }
+    }
   }
   
  }

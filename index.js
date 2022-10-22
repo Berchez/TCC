@@ -165,6 +165,9 @@ var dataSelector = ui.Select({
   items: Object.keys(dataInfo) 
 });  
 
+var btnRun = ui.Button('Run', updateMaps, false, {width: '100%', padding: '20px 20px 0px 0px'}, null);
+var cbxMedia = ui.Checkbox('Show average (Dates)', false, null, false, null);
+
 // Get data information - used globally in functions. 
 var datasetUrl = ui.url.get('dataset', 'Nitrogen dioxide'); 
 ui.url.set('dataset', datasetUrl); // need to set incase this is the initial load. 
@@ -270,20 +273,20 @@ var intro = ui.Panel([
 ]);  
  
 var leftSliderDate = ui.DateSlider({ 
-  start: '2015-01-01', 
-  end: ee.Date(), 
+  start: '2010-01-01', 
+  end: new Date(), 
   value: '2020-01-01', 
   period: 1, 
   style: {stretch: 'horizontal', shown: true}}); 
-leftSliderDate.setDisabled(true); 
+leftSliderDate.setDisabled(false); 
    
 var rightSliderDate = ui.DateSlider({ 
-  start: '2020-01-01', 
-  end: '2020-02-01', 
+  start: '2010-01-01', 
+  end: new Date(), 
   value: '2020-01-01', 
   period: 1, 
   style: {stretch: 'horizontal', shown: true}}); 
-rightSliderDate.setDisabled(true);  
+rightSliderDate.setDisabled(false);  
  
 var dataSelectPanel = ui.Panel({ 
   widgets: [dataSelector], 
@@ -299,7 +302,7 @@ var leftDatePanel = ui.Panel({
   style: {stretch: 'horizontal'} 
 }); 
 
-var selectedYear = 2019;
+var selectedYear = 2009;
 function changeSelectedYearSelect() {
   if(selectYearSelect !== undefined){
     selectedYear = selectYearSelect.getValue()
@@ -309,7 +312,7 @@ function changeSelectedYearSelect() {
 
 var selectYearLabel = ui.Label({value: 'Select year:'});
 var selectYearSelect = ui.Select({
-  value: "2019",
+  value: "2021",
   items: getYears2019ToNow(),
   style: {width: '200px'},
   onChange: changeSelectedYearSelect
@@ -368,6 +371,8 @@ var mapComparison = ui.Panel([
   // selectYearPanel,
   leftDatePanel,
   rightDatePanel,
+  //cbxMedia,
+  btnRun,
   ui.Label({value: '4. Adjust palette stretch:'}), 
   stretchPanel, 
   ui.Label('[legend]'), 
@@ -378,7 +383,8 @@ var mapComparison = ui.Panel([
 infoPanel.add(intro); 
 var panelBreak25 = ui.Panel(null, null, {stretch: 'horizontal', height: '1px', backgroundColor: '000', margin: '8px 0px 8px 0px'}); 
 infoPanel.add(panelBreak25); 
-infoPanel.add(mapComparison);  
+infoPanel.add(mapComparison);
+
 function dataSelectorHandler(e) { 
   var datasetFromClick = dataSelector.getValue(); 
   var dataTypeFromClick = "Offline"; 
@@ -588,14 +594,47 @@ cloudFracSlider.onChange(updateCloudFracSlider);
  function updateMaps() {
   var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul","Aug", "Sep", "Oct", "Nov", "Dec"];
   
-  var date = ee.Date.fromYMD(parseInt(selectedYear),01,01)
+  var initialTotalDate = new Date(leftSliderDate.getValue()[1]);
+  var finalTotalDate = new Date(rightSliderDate.getValue()[1])
   
-  for (var i = 0; i<12; i++){
-    var img = compositeImages(date);
-    maps[i].layers().set(0, ui.Map.Layer(img, thisData.visParams, null, true, 0.55));
-    date = date.update({
-      month: date.advance(1,'month').get("month"),
-   })
+  var initialYear = initialTotalDate.getFullYear();
+  var finalYear = finalTotalDate.getFullYear();
+  var initialMonth = initialTotalDate.getMonth() + 1;
+  var finalMonth = finalTotalDate.getMonth() + 1;
+  
+  
+  if(initialTotalDate.getTime() > finalTotalDate.getTime()){
+    alert("Start date must be smaller than end date!")
+    return;
+  }
+  
+  var timeDifference = new Date(finalTotalDate.getTime() - initialTotalDate.getTime()) //Compara se o intervalo de tempo eh menor que um ano
+  if(timeDifference.getFullYear() <= 1970){
+    alert("Time span must be greater than one year!")
+    return;
+  }
+  
+  
+  print(initialMonth,initialYear)
+  print(finalMonth,finalYear)
+  
+  for (var i = initialYear; i<finalYear; i++){
+    print("TESTE")
+    for(var k = 0; k < 12; k++){
+      if((i !== initialYear) && (k >= initialMonth)){ //Caso o mes inicial for maior do que mes da iteracao, ele nao faz nada
+        print("entrei pra fazer media")
+        var img = compositeImages(date);
+        print(img);
+        maps[i].layers().set(0, ui.Map.Layer(img, thisData.visParams, null, true, 0.55));
+        date = date.update({
+          month: date.advance(1,'month').get("month"),
+       })
+      }
+       if((i === finalYear) && (k > finalMonth)){
+        print("vou sair!")
+        return;
+      }
+    }
   }
   
  }
@@ -636,7 +675,7 @@ function updateLeftSliderDate() {
       start: dates.firstDate, 
       end: dates.lastDate, 
       value: dates.selectedDate, 
-      period: 365, 
+      period: 1, 
       style: {stretch: 'horizontal'}, 
       onChange: leftDateHandler 
     }); 
@@ -682,7 +721,7 @@ function updateRightSliderDate() {
       start: dates.firstDate, 
       end: dates.lastDate, 
       value: dates.selectedDate, 
-      period: 365, 
+      period: 1, 
       style: {stretch: 'horizontal'}, 
       onChange: rightDateHandler 
     }); 
