@@ -608,7 +608,6 @@ cloudFracSlider.onChange(updateCloudFracSlider);
     return;
   }
   
-  if()
   
   print(initialMonth,initialYear)
   print(finalMonth,finalYear)
