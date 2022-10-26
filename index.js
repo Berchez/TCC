@@ -9,6 +9,10 @@ function getYears2019ToNow() {
   return anos;
 }
 
+function exibirInformacoes(){
+  alert('Cada gás selecionado tem uma série histórica diferente like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text.');
+}
+
 // Max area
 var maxAoiArea = 8e11;
 var aoiArea = null;
@@ -173,6 +177,13 @@ var dataSelector = ui.Select({
   items: Object.keys(dataInfo),
 });
 
+var btnInfoGas = ui.Button({
+  label: 'Help',
+  imageUrl: 'https://fonts.gstatic.com/s/i/materialiconsoutlined/info/v13/24px.svg',
+  onClick: exibirInformacoes,
+  style: {margin: '10px 0px 0px 5px'},
+});
+
 var btnRun = ui.Button(
   "Run",
   updateMaps,
@@ -287,7 +298,7 @@ function rightDateHandler() {
 // ### STEP UP THE INFO PANEL ###
 // #############################################################################
 // Define the info panel.
-var infoPanel = ui.Panel({ style: { width: "27%" } });
+var infoPanel = ui.Panel({ style: { width: '27%', maxWidth: "40%" } });
 
 // Create an introduction panel.
 var intro = ui.Panel([
@@ -322,7 +333,7 @@ var rightSliderDate = ui.DateSlider({
 rightSliderDate.setDisabled(false);
 
 var dataSelectPanel = ui.Panel({
-  widgets: [dataSelector],
+  widgets: [dataSelector, btnInfoGas],
   layout: ui.Panel.Layout.flow("horizontal"),
   style: { stretch: "horizontal" },
 });
@@ -576,6 +587,9 @@ var bigMap = ui.Map({
   center: { lat: -3.732708, lon: -61.479492, zoom: 4.5 },
 });
 
+bigMap.setOptions('SATELLITE');
+
+
 // Set 12 maps
 var months = [
   "Jan",
@@ -597,10 +611,12 @@ ui.Panel.Layout.flow("horizontal", true);
 var date = ee.Date.fromYMD(selectedYear, 01, 01);
 
 for (var i = 0; i < 12; i++) {
-  var map = ui.Map().setControlVisibility(false);
-  map.style().set("width", "300px");
-  map.style().set("height", "300px");
-  map.style().set("margin", "16px");
+  var map = ui.Map().setControlVisibility(false, false, true, true, true, false, false);
+  map.setOptions('SATELLITE');
+
+  map.style().set("width", "calc(33% - 24px)");
+  map.style().set("height", "31%");
+  map.style().set("margin", "8px");
   // map.addLayer(composite, vis[label])
   var img = compositeImages(date);
 
@@ -645,6 +661,17 @@ var mapsPanel = ui.Panel({
   style: { stretch: "both", width: "100%" },
 });
 // mapsPanel.Layout.flow("horizontal",true)
+
+var lblMediasMensais = ui.Label({
+  value: 'Monthly Average:',
+  style: {fontSize: '24px', fontWeight: '500', margin:'10px 0px 0px 15px'},
+})
+
+var pnlMediasMensais = ui.Panel({
+  // layout: ui.Panel.Layout.flow("vertical", true),
+  widgets: [lblMediasMensais, mapsPanel]
+})
+
 for (var i = 0; i < linkerMaps.length; i++) {
   mapsPanel.add(linkerMaps[i]);
 }
@@ -928,7 +955,7 @@ drawingToolsRight.layers().get(0).setLocked(true);
 var mapChartSplitPanel = ui.Panel(
   ui.SplitPanel({
     firstPanel: ui.Panel(bigMap, null, { height: "60%" }),
-    secondPanel: ui.Panel(mapsPanel, null, {
+    secondPanel: ui.Panel(pnlMediasMensais, null, {
       stretch: "horizontal",
       width: "600px",
     }), //
