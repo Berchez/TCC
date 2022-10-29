@@ -587,6 +587,7 @@ var bigMap = ui.Map({
   center: { lat: -3.732708, lon: -61.479492, zoom: 4.5 },
 });
 
+bigMap.addLayer(bioma_amazonico, {}, 'Amazonia');
 bigMap.setOptions('SATELLITE');
 
 
@@ -762,24 +763,23 @@ function updateMaps() {
   print(initialMonth, initialYear);
   print(finalMonth, finalYear);
 
-  for (var i = initialYear; i < finalYear; i++) {
-    print("TESTE");
-    for (var k = 0; k < 12; k++) {
-      if (i !== initialYear && k >= initialMonth) {
-        //Caso o mes inicial for maior do que mes da iteracao, ele nao faz nada
-        print("entrei pra fazer media");
+  
+  print(bioma_amazonico)
+
+  for (var i = initialYear; i <= finalYear; i++) {
+    for (var k = 1; k <= 12; k++) {
+      print("i: "+i+" k: "+k+" InitialYear: "+initialYear+" InitialMonth: "+initialMonth+" FinalYear: "+finalYear+" FinalMonth: "+finalMonth)
+      if ((i === initialYear && k >= initialMonth) || (i !== initialYear && k <= finalMonth)) {
+        //Verifica se esta no intervalo de tempo definido
+        print("entrei pra fazer media",k);
         var img = compositeImages(date);
-        print(img);
-        maps[i]
+        maps[k-1]
           .layers()
           .set(0, ui.Map.Layer(img, thisData.visParams, null, true, 0.55));
+          maps[k-1].addLayer(bioma_amazonico, {}, 'Amazonia');
         date = date.update({
           month: date.advance(1, "month").get("month"),
         });
-      }
-      if (i === finalYear && k > finalMonth) {
-        print("vou sair!");
-        return;
       }
     }
   }
