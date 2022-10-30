@@ -1,3 +1,5 @@
+var bioma_amazonico = ee.FeatureCollection("users/joaobianco/amazonia")
+
 function getYears2019ToNow() {
   var i = 2019;
   var anoFinal = parseInt(new Date().getFullYear());
@@ -532,6 +534,7 @@ function maskClouds(img) {
   var cloudMask = img.select(thisData.cloudBand).lte(cloudFrac);
   return img.updateMask(cloudMask);
 }
+
 function compositeImages(targetDate) {
   var startDate = targetDate;
   var endDate = targetDate.advance(1, "month"); // 4
@@ -612,7 +615,8 @@ ui.Panel.Layout.flow("horizontal", true);
 var date = ee.Date.fromYMD(selectedYear, 01, 01);
 
 for (var i = 0; i < 12; i++) {
-  var map = ui.Map().setControlVisibility(false, false, true, true, true, false, false);
+  // var map = ui.Map().setControlVisibility(false, false, true, true, true, false, false);
+  var map = ui.Map().setControlVisibility(true, true, true, true, true, true, true);
   map.setOptions('SATELLITE');
 
   map.style().set("width", "calc(33% - 24px)");
@@ -760,26 +764,22 @@ function updateMaps() {
     return;
   }
 
-  print(initialMonth, initialYear);
-  print(finalMonth, finalYear);
-
-  
-  print(bioma_amazonico)
+  // print(initialMonth, initialYear);
+  // print(finalMonth, finalYear);
 
   for (var i = initialYear; i <= finalYear; i++) {
     for (var k = 1; k <= 12; k++) {
-      print("i: "+i+" k: "+k+" InitialYear: "+initialYear+" InitialMonth: "+initialMonth+" FinalYear: "+finalYear+" FinalMonth: "+finalMonth)
+      // print("i: "+i+" k: "+k+" InitialYear: "+initialYear+" InitialMonth: "+initialMonth+" FinalYear: "+finalYear+" FinalMonth: "+finalMonth)
       if ((i === initialYear && k >= initialMonth) || (i !== initialYear && k <= finalMonth)) {
         //Verifica se esta no intervalo de tempo definido
-        print("entrei pra fazer media",k);
         var img = compositeImages(date);
         maps[k-1]
           .layers()
           .set(0, ui.Map.Layer(img, thisData.visParams, null, true, 0.55));
-          maps[k-1].addLayer(bioma_amazonico, {}, 'Amazonia');
         date = date.update({
           month: date.advance(1, "month").get("month"),
         });
+        maps[k-1].addLayer(bioma_amazonico, {}, 'Amazonia');
       }
     }
   }
