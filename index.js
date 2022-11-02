@@ -11,9 +11,13 @@ function getYears2019ToNow() {
   return anos;
 }
 
+
+
 function exibirInformacoes(){
   alert('Cada gás selecionado tem uma série histórica diferente like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text.');
 }
+
+
 
 // Max area
 var maxAoiArea = 8e11;
@@ -591,7 +595,7 @@ var bigMap = ui.Map({
 });
 
 bigMap.addLayer(bioma_amazonico, {}, 'Amazonia');
-bigMap.setOptions('SATELLITE');
+bigMap.setOptions('HYBRID');
 
 
 // Set 12 maps
@@ -617,7 +621,7 @@ var date = ee.Date.fromYMD(selectedYear, 01, 01);
 for (var i = 0; i < 12; i++) {
   // var map = ui.Map().setControlVisibility(false, false, true, true, true, false, false);
   var map = ui.Map().setControlVisibility(false);
-  map.setOptions('MAP');
+  map.setOptions('TERRAIN');
 
   map.style().set("width", "calc(33% - 24px)");
   map.style().set("height", "31%");
