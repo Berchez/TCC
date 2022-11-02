@@ -970,7 +970,7 @@ while (nLayers > 0) {
   drawingToolsRight.layers().remove(layer);
   nLayers = drawingToolsRight.layers().length();
 }
-drawingTools.addLayer([aoi], null, "FFF");
+drawingTools.addLayer([aoi], null, "#006600");
 drawingToolsRight.addLayer([aoi], null, "FFF");
 drawingToolsRight.layers().get(0).setLocked(true);
 
