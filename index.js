@@ -616,8 +616,8 @@ var date = ee.Date.fromYMD(selectedYear, 01, 01);
 
 for (var i = 0; i < 12; i++) {
   // var map = ui.Map().setControlVisibility(false, false, true, true, true, false, false);
-  var map = ui.Map().setControlVisibility(true, true, true, true, true, true, true);
-  map.setOptions('SATELLITE');
+  var map = ui.Map().setControlVisibility(false);
+  map.setOptions('MAP');
 
   map.style().set("width", "calc(33% - 24px)");
   map.style().set("height", "31%");
@@ -669,7 +669,7 @@ var mapsPanel = ui.Panel({
 
 var lblMediasMensais = ui.Label({
   value: 'Monthly Average:',
-  style: {fontSize: '24px', fontWeight: '500', margin:'10px 0px 0px 15px'},
+  style: {fontSize: '18px', fontWeight: '500', margin:'10px 0px 0px 15px'},
 })
 
 var pnlMediasMensais = ui.Panel({
