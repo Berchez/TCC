@@ -377,27 +377,7 @@ var leftDatePanel = ui.Panel({
   style: { stretch: "horizontal" },
 });
 
-var selectedYear = 2009;
-function changeSelectedYearSelect() {
-  if (selectYearSelect !== undefined) {
-    selectedYear = selectYearSelect.getValue();
-    updateMaps();
-  }
-}
 
-var selectYearLabel = ui.Label({ value: "Select year:" });
-var selectYearSelect = ui.Select({
-  value: "2021",
-  items: getYears2019ToNow(),
-  style: { width: "200px" },
-  onChange: changeSelectedYearSelect,
-});
-
-var selectYearPanel = ui.Panel({
-  widgets: [selectYearLabel, selectYearSelect],
-  layout: ui.Panel.Layout.flow("horizontal"),
-  style: { stretch: "horizontal" },
-});
 
 var rightDateLabel = ui.Label({
   value: "Final Date:",
@@ -454,7 +434,6 @@ var mapComparison = ui.Panel([
     value: "2. Dates:",
     style: { fontWeight: "bold", fontSize: "18px" },
   }),
-  // selectYearPanel,
   leftDatePanel,
   rightDatePanel,
   //cbxMedia,
