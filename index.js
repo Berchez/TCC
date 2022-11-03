@@ -13,6 +13,18 @@ function getYears2019ToNow() {
 
 
 
+function changeDates(){
+
+  var dateRange = getMinMaxDate();
+  var firstDate = ee.Date(dateRange.get("firstDate"));
+  var lastDate = ee.Date(dateRange.get("lastDate"));
+  
+  leftSliderDate.setValue(firstDate);
+  rightSliderDate.setValue(lastDate);
+  
+}
+
+
 function exibirInformacoes(){
   alert('Cada gás selecionado tem uma série histórica diferente like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text.');
 }
@@ -473,6 +485,8 @@ function dataSelectorHandler(e) {
 
   thisData = dataInfo[datasetFromClick];
   thisData.colId = thisData[dataTypeFromClick];
+  
+  changeDates();
 
   // if(thisData.cloudBand !== '') {
   //   cloudFracSlider.setDisabled(false);
