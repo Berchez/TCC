@@ -22,12 +22,18 @@ function changeDates(){
   leftSliderDate.setValue(firstDate);
   rightSliderDate.setValue(lastDate);
   
+  leftSliderDate.setStart(firstDate);
+  rightSliderDate.setStart(firstDate);
+  
 }
+
 
 
 function exibirInformacoes(){
   alert('Cada gás selecionado tem uma série histórica diferente like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text.');
 }
+
+
 
 // Max area
 var maxAoiArea = 8e11;
@@ -608,7 +614,7 @@ var months = [
 var maps = [];
 
 ui.Panel.Layout.flow("horizontal", true);
-var date = ee.Date.fromYMD(selectedYear, 01, 01);
+var date = ee.Date.fromYMD(selectYear, 01, 01);
 
 for (var i = 0; i < 12; i++) {
   // var map = ui.Map().setControlVisibility(false, false, true, true, true, false, false);
