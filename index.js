@@ -1,4 +1,4 @@
-var bioma_amazonico = ee.FeatureCollection("users/joaobianco/amazonia")
+var bioma_amazonico = ee.FeatureCollection("users/joaobianco/amazonia");
 
 function getYears2019ToNow() {
   var i = 2019;
@@ -28,8 +28,6 @@ function changeDates(){
 function exibirInformacoes(){
   alert('Cada gás selecionado tem uma série histórica diferente like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text.');
 }
-
-
 
 // Max area
 var maxAoiArea = 8e11;
@@ -196,10 +194,11 @@ var dataSelector = ui.Select({
 });
 
 var btnInfoGas = ui.Button({
-  label: 'Help',
-  imageUrl: 'https://fonts.gstatic.com/s/i/materialiconsoutlined/info/v13/24px.svg',
+  label: "Help",
+  imageUrl:
+    "https://fonts.gstatic.com/s/i/materialiconsoutlined/info/v13/24px.svg",
   onClick: exibirInformacoes,
-  style: {margin: '10px 0px 0px 5px'},
+  style: { margin: "10px 0px 0px 5px" },
 });
 
 var btnRun = ui.Button(
@@ -316,7 +315,7 @@ function rightDateHandler() {
 // ### STEP UP THE INFO PANEL ###
 // #############################################################################
 // Define the info panel.
-var infoPanel = ui.Panel({ style: { width: '27%', maxWidth: "40%" } });
+var infoPanel = ui.Panel({ style: { width: "27%", maxWidth: "40%" } });
 
 // Create an introduction panel.
 var intro = ui.Panel([
@@ -485,7 +484,7 @@ function dataSelectorHandler(e) {
 
   thisData = dataInfo[datasetFromClick];
   thisData.colId = thisData[dataTypeFromClick];
-  
+
   changeDates();
 
   // if(thisData.cloudBand !== '') {
@@ -554,6 +553,7 @@ function maskClouds(img) {
 }
 
 function compositeImages(targetDate) {
+  targetDate = ee.Date(targetDate);
   var startDate = targetDate;
   var endDate = targetDate.advance(1, "month"); // 4
   //var startDate = targetDate.advance(-8, 'day'); // -3
@@ -608,9 +608,8 @@ var bigMap = ui.Map({
   center: { lat: -3.732708, lon: -61.479492, zoom: 4.5 },
 });
 
-bigMap.addLayer(bioma_amazonico, {}, 'Amazonia');
-bigMap.setOptions('HYBRID');
-
+bigMap.addLayer(bioma_amazonico, {}, "Amazonia");
+bigMap.setOptions("HYBRID");
 
 // Set 12 maps
 var months = [
@@ -635,7 +634,7 @@ var date = ee.Date.fromYMD(selectedYear, 01, 01);
 for (var i = 0; i < 12; i++) {
   // var map = ui.Map().setControlVisibility(false, false, true, true, true, false, false);
   var map = ui.Map().setControlVisibility(false);
-  map.setOptions('TERRAIN');
+  map.setOptions("TERRAIN");
 
   map.style().set("width", "calc(33% - 24px)");
   map.style().set("height", "31%");
@@ -662,7 +661,7 @@ rightMap.setControlVisibility({
   zoomControl: false,
   fullscreenControl: false,
 });
-leftMap.drawingTools().setShown(false);
+bigMap.drawingTools().setShown(false);
 rightMap.drawingTools().setShown(false);
 leftMap.setOptions("Dark", { Dark: darkMap() });
 rightMap.setOptions("Dark", { Dark: darkMap() });
@@ -686,14 +685,14 @@ var mapsPanel = ui.Panel({
 // mapsPanel.Layout.flow("horizontal",true)
 
 var lblMediasMensais = ui.Label({
-  value: 'Monthly Average:',
-  style: {fontSize: '18px', fontWeight: '500', margin:'10px 0px 0px 15px'},
-})
+  value: "Monthly Average:",
+  style: { fontSize: "18px", fontWeight: "500", margin: "10px 0px 0px 15px" },
+});
 
 var pnlMediasMensais = ui.Panel({
   // layout: ui.Panel.Layout.flow("vertical", true),
-  widgets: [lblMediasMensais, mapsPanel]
-})
+  widgets: [lblMediasMensais, mapsPanel],
+});
 
 for (var i = 0; i < linkerMaps.length; i++) {
   mapsPanel.add(linkerMaps[i]);
@@ -787,17 +786,39 @@ function updateMaps() {
 
   for (var i = initialYear; i <= finalYear; i++) {
     for (var k = 1; k <= 12; k++) {
-      // print("i: "+i+" k: "+k+" InitialYear: "+initialYear+" InitialMonth: "+initialMonth+" FinalYear: "+finalYear+" FinalMonth: "+finalMonth)
-      if ((i === initialYear && k >= initialMonth) || (i !== initialYear && k <= finalMonth)) {
-        //Verifica se esta no intervalo de tempo definido
-        var img = compositeImages(date);
-        maps[k-1]
+      //Verifica se esta no intervalo de tempo definido
+      if (i === finalYear && k <= finalMonth) {
+        return;
+      }
+      if (
+        (i === initialYear && k >= initialMonth) ||
+        (i !== initialYear && k <= finalMonth)
+      ) {
+        print(
+          "i: " +
+            i +
+            " k: " +
+            k +
+            " InitialYear: " +
+            initialYear +
+            " InitialMonth: " +
+            initialMonth +
+            " FinalYear: " +
+            finalYear +
+            " FinalMonth: " +
+            finalMonth
+        );
+        var img = compositeImages(new Date(i, k, 1));
+        maps[k - 1]
           .layers()
           .set(0, ui.Map.Layer(img, thisData.visParams, null, true, 0.55));
-        date = date.update({
-          month: date.advance(1, "month").get("month"),
-        });
-        maps[k-1].addLayer(bioma_amazonico, {}, 'Amazonia');
+        maps[k - 1].addLayer(
+          bioma_amazonico,
+          { color: "#ffffff" },
+          "Amazonia",
+          null,
+          0.2
+        );
       }
     }
   }
@@ -948,7 +969,7 @@ var tsChart = ui.Panel([noPlotLabel, contChart, yoyChart]);
 // ### PREP FOR DEALING WITH GEOMETRY DRAWING ###
 // #############################################################################
 // Get the drawing tools widget object.
-var drawingTools = leftMap.drawingTools();
+var drawingTools = bigMap.drawingTools();
 var drawingToolsRight = rightMap.drawingTools();
 // clear any existing geometries.
 var nLayers = drawingTools.layers().length();
@@ -963,7 +984,7 @@ while (nLayers > 0) {
   drawingToolsRight.layers().remove(layer);
   nLayers = drawingToolsRight.layers().length();
 }
-drawingTools.addLayer([aoi], null, "FFF");
+drawingTools.addLayer([aoi], null, "#006600");
 drawingToolsRight.addLayer([aoi], null, "FFF");
 drawingToolsRight.layers().get(0).setLocked(true);
 
@@ -1000,9 +1021,9 @@ leftMap.onChangeBounds(function (e) {
 // #############################################################################
 // Add data to maps.
 var blankImg = ee.Image(0).selfMask();
-leftMap.addLayer(blankImg);
+bigMap.addLayer(blankImg);
 rightMap.addLayer(blankImg);
-leftMap.add(leftLabel);
+bigMap.add(leftLabel);
 rightMap.add(rightLabel);
 // if(thisData.cloudBand !== '') {
 //   cloudFracSlider.setDisabled(false);
