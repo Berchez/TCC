@@ -1,31 +1,26 @@
 var bioma_amazonico = ee.FeatureCollection("users/joaobianco/amazonia");
 
-function changeDates(){
-
+function changeDates() {
   var dateRange = getMinMaxDate();
   var firstDate = ee.Date(dateRange.get("firstDate"));
   var lastDate = ee.Date(dateRange.get("lastDate"));
-  
+
   leftSliderDate.setValue(firstDate);
   rightSliderDate.setValue(lastDate);
-  
+
   leftSliderDate.setStart(firstDate);
   rightSliderDate.setStart(firstDate);
-  
 }
 
-
-
-function exibirInformacoes(){
-  alert('Cada gás selecionado tem uma série histórica diferente like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text.');
+function exibirInformacoes() {
+  alert(
+    "Cada gás selecionado tem uma série histórica diferente like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text."
+  );
 }
-
-
 
 // Max area
 var maxAoiArea = 8e11;
 var aoiArea = null;
-
 // Define vis palette:
 var palette = [
   "000004",
@@ -36,7 +31,6 @@ var palette = [
   "FDAE78",
   "FCFDBF",
 ];
-
 // Define data options.
 var dataInfo = {
   "Nitrogen dioxide": {
@@ -372,8 +366,6 @@ var leftDatePanel = ui.Panel({
   style: { stretch: "horizontal" },
 });
 
-
-
 var rightDateLabel = ui.Label({
   value: "Final Date:",
   style: {
@@ -603,7 +595,7 @@ var months = [
 var maps = [];
 
 ui.Panel.Layout.flow("horizontal", true);
-var date = ee.Date(leftSliderDate.getValue()[1])
+var date = ee.Date(leftSliderDate.getValue()[1]);
 // var date = ee.Date.fromYMD(selectYear, 01, 01);
 
 for (var i = 0; i < 12; i++) {
@@ -613,7 +605,7 @@ for (var i = 0; i < 12; i++) {
 
   map.style().set("maxWidth", "calc(33% - 16px)");
   map.style().set("minWidth", "calc(33% - 16px)");
-  map.style().set("maxHeight","10%");
+  map.style().set("maxHeight", "10%");
   map.style().set("margin", "8px");
   // map.addLayer(composite, vis[label])
   var img = compositeImages(date);
@@ -785,16 +777,10 @@ function updateMaps() {
             finalMonth
         );
         var img = compositeImages(new Date(i, k, 1));
+        var temp = img.clipToCollection(bioma_amazonico);
         maps[k - 1]
           .layers()
-          .set(0, ui.Map.Layer(img, thisData.visParams, null, true, 0.55));
-        maps[k - 1].addLayer(
-          bioma_amazonico,
-          { color: "#ffffff" },
-          "Amazonia",
-          null,
-          0.2
-        );
+          .set(0, ui.Map.Layer(temp, thisData.visParams, null, true, 0.75));
       }
     }
   }
