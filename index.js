@@ -1,18 +1,5 @@
 var bioma_amazonico = ee.FeatureCollection("users/joaobianco/amazonia");
 
-function getYears2019ToNow() {
-  var i = 2019;
-  var anoFinal = parseInt(new Date().getFullYear());
-  var anos = [];
-  while (i <= anoFinal) {
-    anos.push(i.toString());
-    i++;
-  }
-  return anos;
-}
-
-
-
 function changeDates(){
 
   var dateRange = getMinMaxDate();
@@ -26,8 +13,6 @@ function changeDates(){
   rightSliderDate.setStart(firstDate);
   
 }
-
-
 
 function exibirInformacoes(){
   alert('Cada gás selecionado tem uma série histórica diferente like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text.');
@@ -614,7 +599,8 @@ var months = [
 var maps = [];
 
 ui.Panel.Layout.flow("horizontal", true);
-var date = ee.Date.fromYMD(selectYear, 01, 01);
+var date = ee.Date(leftSliderDate.getValue()[1])
+// var date = ee.Date.fromYMD(selectYear, 01, 01);
 
 for (var i = 0; i < 12; i++) {
   // var map = ui.Map().setControlVisibility(false, false, true, true, true, false, false);
