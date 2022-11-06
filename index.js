@@ -14,6 +14,8 @@ function changeDates(){
   
 }
 
+
+
 function exibirInformacoes(){
   alert('Cada gás selecionado tem uma série histórica diferente like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text.');
 }
@@ -23,6 +25,7 @@ function exibirInformacoes(){
 // Max area
 var maxAoiArea = 8e11;
 var aoiArea = null;
+
 // Define vis palette:
 var palette = [
   "000004",
@@ -33,6 +36,7 @@ var palette = [
   "FDAE78",
   "FCFDBF",
 ];
+
 // Define data options.
 var dataInfo = {
   "Nitrogen dioxide": {
@@ -607,8 +611,9 @@ for (var i = 0; i < 12; i++) {
   var map = ui.Map().setControlVisibility(false);
   map.setOptions("TERRAIN");
 
-  map.style().set("width", "calc(33% - 24px)");
-  map.style().set("height", "31%");
+  map.style().set("maxWidth", "calc(33% - 16px)");
+  map.style().set("minWidth", "calc(33% - 16px)");
+  map.style().set("maxHeight","10%");
   map.style().set("margin", "8px");
   // map.addLayer(composite, vis[label])
   var img = compositeImages(date);
