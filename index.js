@@ -712,7 +712,7 @@ function updateCloudFracSlider(val) {
 }
 cloudFracSlider.onChange(updateCloudFracSlider);
 
-function updateMaps() {
+function updateMaps(isDraw,aoi) {
   var months = [
     "Jan",
     "Feb",
@@ -777,10 +777,16 @@ function updateMaps() {
             finalMonth
         );
         var img = compositeImages(new Date(i, k, 1));
-        var temp = img.clipToCollection(bioma_amazonico);
+        var temp
+        if(!isDraw){
+          temp = img.clipToCollection(bioma_amazonico);
+        }else{
+          temp = img.clip(aoi);
+          maps[k-1].centerObject(aoi,6)
+        }
         maps[k - 1]
           .layers()
-          .set(0, ui.Map.Layer(temp, thisData.visParams, null, true, 0.75));
+          .set(0, ui.Map.Layer(temp, thisData.visParams, "Amazonia", true, 0.75));
       }
     }
   }
@@ -1231,6 +1237,7 @@ function chartTimeSeries() {
 // #############################################################################
 function clearRightGeom() {
   var nLayers = drawingToolsRight.layers().length();
+  // bigMap.addLayer(bioma_amazonico, {}, "Amazonia");
   while (nLayers > 0) {
     var layer = drawingToolsRight.layers().get(0);
     drawingToolsRight.layers().remove(layer);
@@ -1238,10 +1245,50 @@ function clearRightGeom() {
   }
 }
 
+var removeLayer = function(name, whatMap, index12maps) {
+  var mapToRemove;
+  if(whatMap === '12maps'){
+    mapToRemove = maps[index12maps]
+  }else{
+    mapToRemove = bigMap
+  }
+  print(maps)
+  var layers = mapToRemove.layers()
+  // list of layers names
+  var names = []
+  layers.forEach(function(lay) {
+    var lay_name = lay.getName()
+    names.push(lay_name)
+  })
+  // get index
+  var index = names.indexOf(name)
+  if (index > -1) {
+    // if name in names
+    var layer = layers.get(index)
+    mapToRemove.remove(layer)
+  } else {
+    print('Layer '+name+' not found')
+  }
+}
+
+function draw12mapsChart(aoi) {
+  for(var i =0;i<12;i++){
+    removeLayer("Amazonia","12maps",i);
+  }
+  updateMaps(true,aoi)
+}
+
 // Function to plot chart on drawing events.
 function drawChart() {
   // Get the geometry.
+  removeLayer("Layer 3","big")
+  removeLayer("Layer 1","big")
+  removeLayer("Layer 2","big")
   aoi = drawingTools.layers().get(0).getEeObject();
+  bigMap.centerObject(aoi,6,null)
+  bigMap.addLayer(aoi)
+  removeLayer("Amazonia","big")
+  draw12mapsChart(aoi)
 
   clearRightGeom();
   drawingToolsRight.addLayer([aoi], null, "FFF");
