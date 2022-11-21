@@ -490,7 +490,7 @@ function dataSelectorHandler(e) {
   // Update map data
   // updateLeftSliderDate();
   // updateRightSliderDate();
-  updateMaps();
+  updateMaps(false,'');
   // Update legend elements
   makeLegend();
   aoi.area(1000).evaluate(function (area) {
@@ -694,7 +694,7 @@ function updateCloudFracSlider(val) {
   cloudFrac = cloudPct / 100;
   // updateLeftSliderDate();
   // updateRightSliderDate();
-  updateMaps();
+  updateMaps(false,'');
   aoi.area(1000).evaluate(function (area) {
     aoiArea = area;
     if (area > maxAoiArea) {
@@ -713,6 +713,9 @@ function updateCloudFracSlider(val) {
 cloudFracSlider.onChange(updateCloudFracSlider);
 
 function updateMaps(isDraw,aoi) {
+  if(typeof isDraw === 'object'){
+    isDraw = false //Define false if not pass parameter
+  }
   var months = [
     "Jan",
     "Feb",
@@ -778,7 +781,7 @@ function updateMaps(isDraw,aoi) {
         );
         var img = compositeImages(new Date(i, k, 1));
         var temp
-        if(!isDraw){
+        if(isDraw === false){
           temp = img.clipToCollection(bioma_amazonico);
         }else{
           temp = img.clip(aoi);
@@ -998,7 +1001,7 @@ rightMap.add(rightLabel);
 // }
 // updateLeftSliderDate();
 // updateRightSliderDate();
-updateMaps();
+updateMaps(false,'');
 
 // #############################################################################
 // ### CHART DATA ###
