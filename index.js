@@ -1,5 +1,6 @@
 var bioma_amazonico = ee.FeatureCollection("users/joaobianco/amazonia");
 var cidades_amazonia = ee.FeatureCollection("users/joaobianco/cidades_amazonia");
+var showCity = false;
 
 var dataStatesAndCities =  [
     {
@@ -4069,6 +4070,7 @@ function chageCityHandler() {
 }
 
 var citySelector = ui.Select({onChange: chageCityHandler})
+citySelector.style().set("shown", false);
 
 function citySelectorHandler(state) {
   if(state === undefined){
@@ -4692,7 +4694,7 @@ function updateMaps(isDraw,aoi) {
         }
         if(isDraw === "cityOrState"){
           temp = img.clip(aoi);
-          maps[k-1].centerObject(aoi,6);
+          maps[k-1].centerObject(aoi,8);
         }
         maps[k - 1]
           .layers()
@@ -5315,6 +5317,19 @@ function setChart() {
   }
 }
 
+// Define city checkbox.
+var cityCheckbox = ui.Checkbox({label:"Show cities?", onChange:cityCheckboxHandler })
+
+function cityCheckboxHandler() {
+  if(cityCheckbox.getValue() === true){
+    citySelector.style().set("shown", true);
+  }else{
+      citySelector.style().set("shown", false);
+  }
+}
+
+
+
 // Define symbols for the labels.
 var symbol = {
   rectangle: "▮",
@@ -5353,6 +5368,7 @@ var timeSeries = ui.Panel({
     ui.Label("2. Select state."),
     stateSelector,
     ui.Label("3. Select city."),
+    cityCheckbox,
     citySelector,
   ],
   style: { position: "bottom-left" },
