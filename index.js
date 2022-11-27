@@ -1,6 +1,6 @@
 var bioma_amazonico = ee.FeatureCollection("users/joaobianco/amazonia");
 var cidades_amazonia = ee.FeatureCollection("users/joaobianco/cidades_amazonia");
-var showCity = false;
+var estados_amazonia = ee.FeatureCollection("users/joaobianco/amazonia_legal-estados");
 
 var dataStatesAndCities =  [
     {
@@ -4047,45 +4047,6 @@ var dataSelector = ui.Select({
   items: Object.keys(dataInfo),
 });
 
-var statesToSelector = ["RO","AC","AM","RR","PA","AP","TO","MA","MT"]
-
-
-function stateSelectorChangeHandler(){
-  citySelectorHandler(stateSelector.getValue())
-}
-
-var stateSelector = ui.Select({items: statesToSelector, onChange: stateSelectorChangeHandler})
-
-
-//filtra o municipio pelo numero dele
-// var ttt = (cidades_amazonia.filter(ee.Filter.eq('CD_MUN','1100015')))
-// var temp2 = ttt.geometry()
-
-var cityOrState;
-function chageCityHandler() {
-  var cityNumber = citySelector.getValue()
-  var citySelectedReturn = cidades_amazonia.filter(ee.Filter.eq('CD_MUN',cityNumber.toString())); //Find city
-  cityOrState = citySelectedReturn.geometry(); //Get city geometry
-  updateMaps("cityOrState",cityOrState)
-}
-
-var citySelector = ui.Select({onChange: chageCityHandler})
-citySelector.style().set("shown", false);
-
-function citySelectorHandler(state) {
-  if(state === undefined){
-    return;
-  }else{
-    var cities = []
-    dataStatesAndCities.map(function(e){
-      if(e.SIGLA == state){
-        cities.push({label: e.NM_MUN, value:e.CD_MUN});
-      }
-    })
-    citySelector.items().reset(cities)
-  }
-}
-
 var btnInfoGas = ui.Button({
   label: "Help",
   imageUrl:
@@ -4692,9 +4653,13 @@ function updateMaps(isDraw,aoi) {
           temp = img.clip(aoi);
           maps[k-1].centerObject(aoi,6)
         }
-        if(isDraw === "cityOrState"){
+        if(isDraw === "city"){
           temp = img.clip(aoi);
           maps[k-1].centerObject(aoi,8);
+        }
+        if(isDraw === "state"){
+          temp = img.clip(aoi);
+          maps[k-1].centerObject(aoi,4);
         }
         maps[k - 1]
           .layers()
@@ -5317,18 +5282,83 @@ function setChart() {
   }
 }
 
+
+//Define states
+var statesToSelector = ["RO","AC","AM","RR","PA","AP","TO","MA","MT"]
+
+function stateSelectorChangeHandler(){
+  citySelectorHandler(stateSelector.getValue())
+}
+
+var stateSelector = ui.Select({items: statesToSelector, onChange: stateSelectorChangeHandler})
+//filtra o municipio pelo numero dele
+// var ttt = (cidades_amazonia.filter(ee.Filter.eq('CD_MUN','1100015')))
+// var temp2 = ttt.geometry()
+
+function changeStateHandler() {
+  var selectedState = stateSelector.getValue()
+    if(selectedState === null){
+      alert("Select a state!");
+      return;
+    }
+    var stateSelectedReturn = estados_amazonia.filter(ee.Filter.eq('SIGLA',selectedState.toString())); //Find state
+    cityOrState = stateSelectedReturn.geometry(); //Get state geometry
+    updateMaps("state",cityOrState)
+}
+
+var cityOrState;
+function chageCityHandler() {
+  var cityNumber = citySelector.getValue()
+  if(cityNumber === null){
+    alert("Select a city!");
+    return;
+  }
+  var citySelectedReturn = cidades_amazonia.filter(ee.Filter.eq('CD_MUN',cityNumber.toString())); //Find city
+  cityOrState = citySelectedReturn.geometry(); //Get city geometry
+  updateMaps("city",cityOrState)
+}
+
+var citySelector = ui.Select()
+citySelector.style().set("shown", false);
+
+function citySelectorHandler(state) {
+  if(state === undefined){
+    return;
+  }else{
+    var cities = []
+    dataStatesAndCities.map(function(e){
+      if(e.SIGLA == state){
+        cities.push({label: e.NM_MUN, value:e.CD_MUN});
+      }
+    })
+    citySelector.items().reset(cities)
+  }
+}
+
 // Define city checkbox.
 var cityCheckbox = ui.Checkbox({label:"Show cities?", onChange:cityCheckboxHandler })
 
 function cityCheckboxHandler() {
   if(cityCheckbox.getValue() === true){
     citySelector.style().set("shown", true);
+    cityStateButton.setLabel("Search city")
   }else{
       citySelector.style().set("shown", false);
+      cityStateButton.setLabel("Search state")
   }
 }
 
+//Define city or state button
+var cityStateButton = ui.Button({label:"Search state", onClick: checkCityOrStateHandler, style:{width: "60%"}})
 
+//Define button function
+function checkCityOrStateHandler() {
+  if(cityCheckbox.getValue() === true){
+    chageCityHandler()
+  }else{
+    changeStateHandler()
+  }
+}
 
 // Define symbols for the labels.
 var symbol = {
@@ -5370,6 +5400,7 @@ var timeSeries = ui.Panel({
     ui.Label("3. Select city."),
     cityCheckbox,
     citySelector,
+    cityStateButton,
   ],
   style: { position: "bottom-left" },
   layout: null,
