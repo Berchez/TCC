@@ -4055,6 +4055,22 @@ var btnInfoGas = ui.Button({
   style: { margin: "10px 0px 0px 5px" },
 });
 
+var btnCleanCity = ui.Button({
+  label: "Clear",
+  imageUrl:
+    "https://fonts.gstatic.com/s/i/materialiconsoutlined/cancel/v13/24px.svg",
+  onClick: cleanCity,
+  style: { margin: "10px 0px 0px 5px" },
+});
+
+var btnCleanState = ui.Button({
+  label: "Clear",
+  imageUrl:
+    "https://fonts.gstatic.com/s/i/materialiconsoutlined/cancel/v13/24px.svg",
+  onClick: cleanState,
+  style: { margin: "10px 0px 0px 5px" },
+});
+
 var btnRun = ui.Button(
   "Run",
   updateMaps,
@@ -4150,6 +4166,27 @@ function rightDateHandler() {
   });
 }
 
+
+
+function cleanCity(){
+
+  citySelector.setValue(null);
+  cityStateButton.setLabel("Search state");
+
+}
+
+
+
+function cleanState(){
+
+  stateSelector.setValue(null);
+  lblCity.style().set("shown", false);
+  pnlCitySelector.style().set("shown", false);
+  
+  cityStateButton.setLabel("Search state"); 
+
+}
+
 // function 12MapsHandler(){
 
 // }
@@ -4208,6 +4245,7 @@ var dataSelectPanel = ui.Panel({
   layout: ui.Panel.Layout.flow("horizontal"),
   style: { stretch: "horizontal" },
 });
+
 var dateSliderLabelWidth = "45px";
 var cloudFracSlider = ui.Slider({
   min: 0,
@@ -4290,10 +4328,10 @@ var mapComparison = ui.Panel([
   rightDatePanel,
   //cbxMedia,
   btnRun,
-  ui.Label({ value: "4. Adjust palette stretch:" }),
-  stretchPanel,
-  ui.Label("[legend]"),
-  ui.Label("[swipeSwitch]"),
+  // ui.Label({ value: "4. Adjust palette stretch:" }),
+  // stretchPanel,
+  // ui.Label("[legend]"),
+  // ui.Label("[swipeSwitch]"),
 ]);
 
 // Add widgets to the info panel.
@@ -4353,11 +4391,7 @@ function dataSelectorHandler(e) {
   ui.url.set("max", thisData.visParams.max);
 
   // Update map data
-  // updateLeftSliderDate();
-  // updateRightSliderDate();
   updateMaps(false,'');
-  // Update legend elements
-  makeLegend();
   aoi.area(1000).evaluate(function (area) {
     aoiArea = area;
     if (area > maxAoiArea) {
@@ -4531,28 +4565,6 @@ for (var i = 0; i < linkerMaps.length; i++) {
   mapsPanel.add(linkerMaps[i]);
 }
 
-var swipeButtonLabel = "Show swipe display";
-if (swipeStatus) {
-  swipeButtonLabel = "Show side-by-side display";
-}
-var swipeButton = ui.Button(swipeButtonLabel, switchSwipe, null, {
-  position: "top-left",
-});
-mapComparison.widgets().set(swipeSwitchIndex, swipeButton);
-function switchSwipe() {
-  if (swipeStatus) {
-    sliderPanel.setWipe(false);
-    swipeButton.setLabel("Show swipe display");
-    swipeStatus = false;
-    ui.url.set("swipe", "false");
-  } else {
-    sliderPanel.setWipe(true);
-    swipeButton.setLabel("Show side-by-side display");
-    swipeStatus = true;
-    ui.url.set("swipe", "true");
-  }
-}
-
 function updateCloudFracSlider(val) {
   cloudPct = val;
   ui.url.set("cloud", val);
@@ -4576,6 +4588,10 @@ function updateCloudFracSlider(val) {
   });
 }
 cloudFracSlider.onChange(updateCloudFracSlider);
+
+function citySelectorOnChange(){
+  cityStateButton.setLabel("Search city"); 
+}
 
 function updateMaps(isDraw,aoi) {
   if(typeof isDraw === 'object'){
@@ -5205,42 +5221,6 @@ function makeColorBarParams(palette) {
   };
 }
 
-function makeLegend() {
-  // Create the color bar for the legend.
-  var colorBar = ui.Thumbnail({
-    image: ee.Image.pixelLonLat().select(0),
-    params: makeColorBarParams(thisData.visParams.palette),
-    style: { stretch: "horizontal", margin: "0px 8px", maxHeight: "20px" },
-  });
-
-  // Create a panel with three numbers for the legend.
-  var legendLabels = ui.Panel({
-    widgets: [
-      ui.Label(thisData.visParams.min, { margin: "4px 8px", fontSize: "12px" }), //
-      ui.Label(
-        thisData.visParams.max / 2, //
-        {
-          margin: "4px 8px",
-          textAlign: "center",
-          stretch: "horizontal",
-          fontSize: "12px",
-        }
-      ),
-      ui.Label(thisData.visParams.max, { margin: "4px 8px", fontSize: "12px" }),
-    ],
-    layout: ui.Panel.Layout.flow("horizontal"),
-  });
-
-  var legendTitle = ui.Label({
-    value: thisData.legendLabel + " 9-day mean",
-    style: { fontWeight: "bold", fontSize: "12px" },
-  });
-
-  var legendPanel = ui.Panel([legendTitle, colorBar, legendLabels]);
-  mapComparison.widgets().set(legendIndex, legendPanel);
-}
-// Add the legend to the info panel
-makeLegend();
 // #############################################################################
 // ### DRAWING TOOLS SETUP ###
 // #############################################################################
@@ -5287,10 +5267,22 @@ function setChart() {
 var statesToSelector = ["RO","AC","AM","RR","PA","AP","TO","MA","MT"]
 
 function stateSelectorChangeHandler(){
-  citySelectorHandler(stateSelector.getValue())
+  citySelectorHandler(stateSelector.getValue());
+  lblCity.style().set("shown", true);
+  pnlCitySelector.style().set("shown", true);
 }
 
-var stateSelector = ui.Select({items: statesToSelector, onChange: stateSelectorChangeHandler})
+var stateSelector = ui.Select({
+  items: statesToSelector, 
+  onChange: stateSelectorChangeHandler,
+  style: {width: "113px"},
+});
+
+var lblCity = ui.Label({
+  value: "3. Select city.",
+  style: { fontWeight: "bold", fontSize: "18px", shown: false },
+});
+
 //filtra o municipio pelo numero dele
 // var ttt = (cidades_amazonia.filter(ee.Filter.eq('CD_MUN','1100015')))
 // var temp2 = ttt.geometry()
@@ -5318,8 +5310,21 @@ function chageCityHandler() {
   updateMaps("city",cityOrState)
 }
 
-var citySelector = ui.Select()
-citySelector.style().set("shown", false);
+var citySelector = ui.Select({onChange: citySelectorOnChange});
+citySelector.style().set("shown", true);
+citySelector.style().set("width", "113px");
+
+var pnlCitySelector = ui.Panel({
+  widgets: [citySelector, btnCleanCity],
+  layout: ui.Panel.Layout.flow("horizontal"),
+  style: { stretch: "horizontal", shown: false },
+});
+
+var pnlStateSelector = ui.Panel({
+  widgets: [stateSelector, btnCleanState],
+  layout: ui.Panel.Layout.flow("horizontal"),
+  style: { stretch: "horizontal" },
+});
 
 function citySelectorHandler(state) {
   if(state === undefined){
@@ -5335,18 +5340,22 @@ function citySelectorHandler(state) {
   }
 }
 
-// Define city checkbox.
-var cityCheckbox = ui.Checkbox({label:"Show cities?", onChange:cityCheckboxHandler })
+//perguntar
 
-function cityCheckboxHandler() {
-  if(cityCheckbox.getValue() === true){
-    citySelector.style().set("shown", true);
-    cityStateButton.setLabel("Search city")
-  }else{
-      citySelector.style().set("shown", false);
-      cityStateButton.setLabel("Search state")
-  }
-}
+// Define city checkbox.
+// var cityCheckbox = ui.Checkbox({label:"Show cities?", onChange:cityCheckboxHandler })
+
+
+
+// function cityCheckboxHandler() {
+//   if(cityCheckbox.getValue() === true){
+//     citySelector.style().set("shown", true);
+//     cityStateButton.setLabel("Search city")
+//   }else{
+//       citySelector.style().set("shown", false);
+//       cityStateButton.setLabel("Search state")
+//   }
+// }
 
 //Define city or state button
 var cityStateButton = ui.Button({label:"Search state", onClick: checkCityOrStateHandler, style:{width: "60%"}})
@@ -5371,9 +5380,12 @@ var timeSeries = ui.Panel({
   widgets: [
     ui.Label({
       value: "Regional Time Series",
-      style: { fontSize: "20px", fontWeight: "bold" },
+      style: { fontSize: "24px", fontWeight: "bold" },
     }),
-    ui.Label("1. Select a drawing mode:"),
+    ui.Label({
+      value: "1. Select a drawing mode:", 
+      style: { fontWeight: "bold", fontSize: "18px" },
+    }),
     ui.Panel(
       [
         ui.Button({
@@ -5395,11 +5407,15 @@ var timeSeries = ui.Panel({
       ui.Panel.Layout.flow("horizontal"),
       { margin: "10px" }
     ),
-    ui.Label("2. Select state."),
-    stateSelector,
-    ui.Label("3. Select city."),
-    cityCheckbox,
-    citySelector,
+    ui.Label({
+      value: "2. Select state.",
+      style: { fontWeight: "bold", fontSize: "18px" },
+    }),
+    pnlStateSelector,
+    lblCity,
+    //perguntar
+    //cityCheckbox,
+    pnlCitySelector,
     cityStateButton,
   ],
   style: { position: "bottom-left" },
