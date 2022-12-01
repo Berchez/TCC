@@ -4316,7 +4316,7 @@ var mapComparison = ui.Panel([
     style: { fontSize: "24px", fontWeight: "bold" },
   }),
   ui.Label({
-    value: "1. Gas:",
+    value: "1. Gas and Aerosol:",
     style: { fontWeight: "bold", fontSize: "18px" },
   }),
   dataSelectPanel,
