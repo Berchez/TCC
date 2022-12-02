@@ -3898,26 +3898,6 @@ var palette = [
 ];
 // Define data options.
 var dataInfo = {
-  "Nitrogen dioxide": {
-    Offline: "COPERNICUS/S5P/OFFL/L3_NO2",
-    colId: "COPERNICUS/S5P/NRTI/L3_NO2",
-    band: "tropospheric_NO2_column_number_density",
-    cloudBand: "cloud_fraction",
-    maskVal: 0.00007,
-    scalar: 1e6,
-    legendLabel: "NO2 (μmol/m²), tropospheric vertical column",
-    unitsLabel: "NO₂ (μmol/m²)",
-    visParams: {
-      palette: palette,
-      min: 20.0,
-      max: 400.0,
-    },
-    viewWindow: {
-      min: 0.0,
-      max: 1000.0,
-    },
-    baseline: 0,
-  },
   Aerosol: {
     Offline: "COPERNICUS/S5P/OFFL/L3_AER_AI",
     colId: "COPERNICUS/S5P/NRTI/L3_AER_AI",
@@ -3958,7 +3938,7 @@ var dataInfo = {
     },
     baseline: 0,
   },
-  Formaldehyde: {
+   Formaldehyde: {
     Offline: "COPERNICUS/S5P/OFFL/L3_HCHO",
     colId: "COPERNICUS/S5P/NRTI/L3_HCHO",
     band: "tropospheric_HCHO_column_number_density",
@@ -3975,6 +3955,46 @@ var dataInfo = {
     viewWindow: {
       min: 0.0,
       max: 600.0,
+    },
+    baseline: 0,
+  },
+  Methane: {
+    Offline: "COPERNICUS/S5P/OFFL/L3_CH4",
+    colId: "COPERNICUS/S5P/OFFL/L3_CH4",
+    band: "CH4_column_volume_mixing_ratio_dry_air",
+    cloudBand: "",
+    maskVal: 1750,
+    scalar: 1,
+    legendLabel: "ppmV, column averaged dry air mixing ratio",
+    unitsLabel: "ppmV",
+    visParams: {
+      palette: palette,
+      min: 1800.0,
+      max: 1900.0,
+    },
+    viewWindow: {
+      min: 1600.0,
+      max: 2000.0,
+    },
+    baseline: 1800,
+  },
+   "Nitrogen dioxide": {
+    Offline: "COPERNICUS/S5P/OFFL/L3_NO2",
+    colId: "COPERNICUS/S5P/NRTI/L3_NO2",
+    band: "tropospheric_NO2_column_number_density",
+    cloudBand: "cloud_fraction",
+    maskVal: 0.00007,
+    scalar: 1e6,
+    legendLabel: "NO2 (μmol/m²), tropospheric vertical column",
+    unitsLabel: "NO₂ (μmol/m²)",
+    visParams: {
+      palette: palette,
+      min: 20.0,
+      max: 400.0,
+    },
+    viewWindow: {
+      min: 0.0,
+      max: 1000.0,
     },
     baseline: 0,
   },
@@ -4018,26 +4038,7 @@ var dataInfo = {
     },
     baseline: 0,
   },
-  Methane: {
-    Offline: "COPERNICUS/S5P/OFFL/L3_CH4",
-    colId: "COPERNICUS/S5P/OFFL/L3_CH4",
-    band: "CH4_column_volume_mixing_ratio_dry_air",
-    cloudBand: "",
-    maskVal: 1750,
-    scalar: 1,
-    legendLabel: "ppmV, column averaged dry air mixing ratio",
-    unitsLabel: "ppmV",
-    visParams: {
-      palette: palette,
-      min: 1800.0,
-      max: 1900.0,
-    },
-    viewWindow: {
-      min: 1600.0,
-      max: 2000.0,
-    },
-    baseline: 1800,
-  },
+  
 };
 var dateInfo = {
   left: { selected: "" },
@@ -4359,7 +4360,7 @@ function dataSelectorHandler(e) {
   // if(thisData.cloudBand !== '') {
   //   cloudFracSlider.setDisabled(false);
   // } else {
-  //   cloudFracSlider.setDisabled(true);
+  //   cloudFracSlider.setDisabled(true);s
   // }
 
   thisData.cloudBand = 5;
@@ -5264,7 +5265,7 @@ function setChart() {
 
 
 //Define states
-var statesToSelector = ["RO","AC","AM","RR","PA","AP","TO","MA","MT"]
+var statesToSelector = ["AC","AM","AP","MA","MT","PA","RO","RR","TO"]
 
 function stateSelectorChangeHandler(){
   citySelectorHandler(stateSelector.getValue());
