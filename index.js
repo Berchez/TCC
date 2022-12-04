@@ -4072,13 +4072,6 @@ var btnCleanState = ui.Button({
   style: { margin: "10px 0px 0px 5px" },
 });
 
-var btnRun = ui.Button(
-  "Run",
-  updateMaps,
-  false,
-  { width: "100%", padding: "20px 20px 0px 0px" },
-  null
-);
 var cbxMedia = ui.Checkbox("Show average (Dates)", false, null, false, null);
 
 // Get data information - used globally in functions.
@@ -4179,12 +4172,13 @@ function cleanCity(){
 
 
 function cleanState(){
-
+  
   stateSelector.setValue(null);
   lblCity.style().set("shown", false);
   pnlCitySelector.style().set("shown", false);
+  cleanCity()//clean selected city
   
-  cityStateButton.setLabel("Search state"); 
+  cityStateButton.setLabel("Run"); 
 
 }
 
@@ -4328,7 +4322,7 @@ var mapComparison = ui.Panel([
   leftDatePanel,
   rightDatePanel,
   //cbxMedia,
-  btnRun,
+  // btnRun,
   // ui.Label({ value: "4. Adjust palette stretch:" }),
   // stretchPanel,
   // ui.Label("[legend]"),
@@ -4391,8 +4385,8 @@ function dataSelectorHandler(e) {
   ui.url.set("min", thisData.visParams.min);
   ui.url.set("max", thisData.visParams.max);
 
-  // Update map data
-  updateMaps(false,'');
+  // Update map data?!
+  // updateMaps(false,'');
   aoi.area(1000).evaluate(function (area) {
     aoiArea = area;
     if (area > maxAoiArea) {
@@ -4633,9 +4627,6 @@ function updateMaps(isDraw,aoi) {
     alert("Time span must be greater than one year!");
     return;
   }
-
-  // print(initialMonth, initialYear);
-  // print(finalMonth, finalYear);
 
   for (var i = initialYear; i <= finalYear; i++) {
     for (var k = 1; k <= 12; k++) {
@@ -5271,6 +5262,7 @@ function stateSelectorChangeHandler(){
   citySelectorHandler(stateSelector.getValue());
   lblCity.style().set("shown", true);
   pnlCitySelector.style().set("shown", true);
+  cityStateButton.setLabel("Search state"); 
 }
 
 var stateSelector = ui.Select({
@@ -5297,6 +5289,10 @@ function changeStateHandler() {
     var stateSelectedReturn = estados_amazonia.filter(ee.Filter.eq('SIGLA',selectedState.toString())); //Find state
     cityOrState = stateSelectedReturn.geometry(); //Get state geometry
     updateMaps("state",cityOrState)
+}
+
+function updateMapsWithoutSelectedArea() {
+  updateMaps(null,'')
 }
 
 var cityOrState;
@@ -5341,32 +5337,17 @@ function citySelectorHandler(state) {
   }
 }
 
-//perguntar
-
-// Define city checkbox.
-// var cityCheckbox = ui.Checkbox({label:"Show cities?", onChange:cityCheckboxHandler })
-
-
-
-// function cityCheckboxHandler() {
-//   if(cityCheckbox.getValue() === true){
-//     citySelector.style().set("shown", true);
-//     cityStateButton.setLabel("Search city")
-//   }else{
-//       citySelector.style().set("shown", false);
-//       cityStateButton.setLabel("Search state")
-//   }
-// }
-
 //Define city or state button
-var cityStateButton = ui.Button({label:"Search state", onClick: checkCityOrStateHandler, style:{width: "60%"}})
+var cityStateButton = ui.Button({label:"Run", onClick: checkWhatToShowHandler, style:{width: "60%"}})
 
 //Define button function
-function checkCityOrStateHandler() {
-  if(cityCheckbox.getValue() === true){
+function checkWhatToShowHandler() {
+  if(citySelector.getValue() !== null){
     chageCityHandler()
-  }else{
+  }else if(stateSelector.getValue() !== null){
     changeStateHandler()
+  }else{
+    updateMapsWithoutSelectedArea()
   }
 }
 
