@@ -4656,6 +4656,7 @@ function updateMaps(isDraw,aoi) {
         //Verifica se eh um desenho ou nao
         if(isDraw === false){
           temp = img.clipToCollection(bioma_amazonico);
+          maps[k-1].centerObject(bioma_amazonico);
         }else{
           temp = img.clip(aoi);
           maps[k-1].centerObject(aoi,6)
@@ -5346,6 +5347,8 @@ function resetAllHandler() {
   cleanCity()
   cleanState()
   updateMaps(false,'')
+  bigMap.addLayer(bioma_amazonico, {}, "Amazonia");
+  bigMap.centerObject(bioma_amazonico);
 }
 
 //Define Run panel
@@ -5412,7 +5415,6 @@ var timeSeries = ui.Panel({
     pnlStateSelector,
     lblCity,
     pnlCitySelector,
-    pnlRun,
   ],
   style: { position: "bottom-left" },
   layout: null,
@@ -5424,8 +5426,18 @@ var panelBreak50 = ui.Panel(null, null, {
   backgroundColor: "000",
   margin: "8px 0px 8px 0px",
 });
+var panelBreak51 = ui.Panel(null, null, {
+  stretch: "horizontal",
+  height: "1px",
+  backgroundColor: "000",
+  margin: "8px 0px 8px 0px",
+});
+
+
 infoPanel.add(panelBreak50);
 infoPanel.add(timeSeries);
+infoPanel.add(panelBreak51);
+infoPanel.add(pnlRun);
 // Define a function to clear the geometry from the layer when a
 // drawing mode button is clicked.
 function clearGeometry() {
