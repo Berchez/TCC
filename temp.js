@@ -4844,7 +4844,7 @@ drawingToolsRight.layers().get(0).setLocked(true);
 // #############################################################################
 // ### SETUP APP DISPLAY ###
 // #############################################################################
-var mapChartSplitPanel = ui.Panel(
+var mapChartSplitPanel = ui.Panel([
   ui.SplitPanel({
     firstPanel: ui.Panel(bigMap, null, { height: "60%" }),
     secondPanel: ui.Panel(pnlMediasMensais, null, {
@@ -4853,12 +4853,12 @@ var mapChartSplitPanel = ui.Panel(
     }), //
     orientation: "vertical",
     wipe: false,
-  })
-);
+  }), tsChart
+]);
 
 // Make the info panel and slider panel split.
+var bigPanel = ui.Panel()
 var splitPanel = ui.SplitPanel(infoPanel, mapChartSplitPanel);
-
 // Set the SplitPanel as the only thing in root.
 ui.root.widgets().reset([splitPanel]);
 // Set url params for map bounds.
