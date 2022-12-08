@@ -4053,23 +4053,23 @@ var btnInfoGas = ui.Button({
   imageUrl:
     "https://fonts.gstatic.com/s/i/materialiconsoutlined/info/v13/24px.svg",
   onClick: exibirInformacoes,
-  style: { margin: "10px 0px 0px 5px" },
+  style: { margin: "10px 0px 0px 5px", backgroundColor:"#ffffff" },
 });
 
 var btnCleanCity = ui.Button({
   label: "Clear",
   imageUrl:
-    "https://fonts.gstatic.com/s/i/materialiconsoutlined/cancel/v13/24px.svg",
+    "https://fonts.gstatic.com/s/i/materialiconsoutlined/delete_forever/v13/24px.svg",
   onClick: cleanCity,
-  style: { margin: "10px 0px 0px 5px" },
+  style: { margin: "10px 0px 0px 5px", backgroundColor:"#ffffff" },
 });
 
 var btnCleanState = ui.Button({
   label: "Clear",
   imageUrl:
-    "https://fonts.gstatic.com/s/i/materialiconsoutlined/cancel/v13/24px.svg",
+    "https://fonts.gstatic.com/s/i/materialiconsoutlined/delete_forever/v13/24px.svg",
   onClick: cleanState,
-  style: { margin: "10px 0px 0px 5px" },
+  style: { margin: "10px 0px 0px 5px", backgroundColor:"#ffffff" },
 });
 
 var cbxMedia = ui.Checkbox("Show average (Dates)", false, null, false, null);
@@ -4165,7 +4165,7 @@ function rightDateHandler() {
 function cleanCity(){
 
   citySelector.setValue(null);
-  cityStateButton.setLabel("Search state");
+  cityStateButton.setLabel("Run by state");
 
 }
 
@@ -4204,8 +4204,7 @@ function cleanState(){
 var infoPanel = ui.Panel({ style: { width: "27%", maxWidth: "40%" } });
 
 // Create an introduction panel.
-var intro = ui.Panel([
-  ui.Label({
+var gambar = ui.Label({
     value: "GAMBAR",
     style: {
       fontSize: "32px",
@@ -4213,7 +4212,10 @@ var intro = ui.Panel([
       textDecoration: "underline",
       backgroundColor: "CFE4D3",
     },
-  }),
+  })
+  
+var intro = ui.Panel([
+  gambar,
   ui.Label({value:"An application to visualize air pollutant time series data.", style:{ backgroundColor:"CFE4D3"}}),
 ]);
 
@@ -4506,6 +4508,7 @@ for (var i = 0; i < 12; i++) {
   map.style().set("margin", "8px");
   // map.addLayer(composite, vis[label])
   var img = compositeImages(date);
+  img = img.clipToCollection(bioma_amazonico);
 
   map.layers().set(0, ui.Map.Layer(img, thisData.visParams, null, true, 0.55));
   map.add(ui.Label(months[i]));
@@ -4588,7 +4591,7 @@ function updateCloudFracSlider(val) {
 cloudFracSlider.onChange(updateCloudFracSlider);
 
 function citySelectorOnChange(){
-  cityStateButton.setLabel("Search city"); 
+  cityStateButton.setLabel("Run by city"); 
 }
 
 function updateMaps(isDraw,aoi) {
@@ -4886,7 +4889,7 @@ rightMap.add(rightLabel);
 // }
 // updateLeftSliderDate();
 // updateRightSliderDate();
-updateMaps(false,'');
+// updateMaps(false,'');
 
 // #############################################################################
 // ### CHART DATA ###
@@ -5057,16 +5060,16 @@ function chartTimeSeries() {
     .byFeature({
       features: no2FcTs.sort("system:time_start"),
       xProperty: "system:time_start",
-      yProperties: ["p25", "p50", "p75", "p0", "p1"],
+      yProperties: ["p25", "p50", "p75"],
     })
     .setChartType("LineChart")
-    .setSeriesNames(["p25", "Median", "IQR", "Left date", "Right date"])
+    .setSeriesNames(["p25", "Mean", "p75"])
     .setOptions({
       height: 245,
       curveType: "function",
       explorer: { axis: "vertical" },
       interpolateNulls: true,
-      title: "Continuous",
+      title: "Complete time series",
       vAxis: {
         baseline: thisData.baseline,
         titleTextStyle: { italic: false, fontSize: 14, bold: true },
@@ -5265,7 +5268,7 @@ function stateSelectorChangeHandler(){
   citySelectorHandler(stateSelector.getValue());
   lblCity.style().set("shown", true);
   pnlCitySelector.style().set("shown", true);
-  cityStateButton.setLabel("Search state"); 
+  cityStateButton.setLabel("Run by state"); 
 }
 
 var stateSelector = ui.Select({
@@ -5342,8 +5345,8 @@ function citySelectorHandler(state) {
 }
 
 //Define city or state button
-var cityStateButton = ui.Button({label:"Run", onClick: checkWhatToShowHandler, style:{width: "50%"}})
-var resetAllButton = ui.Button({label:"Reset", onClick: resetAllHandler, style: {width: "30%"}})
+var cityStateButton = ui.Button({label:"Run", onClick: checkWhatToShowHandler, style:{width: "50%", backgroundColor:"#ffffff"}})
+var resetAllButton = ui.Button({label:"Reset", onClick: resetAllHandler, style: {width: "30%", backgroundColor:"#ffffff"}})
 
 //reset all function
 function resetAllHandler() {
@@ -5395,17 +5398,17 @@ var timeSeries = ui.Panel({
         ui.Button({
           label: symbol.rectangle + " Rectangle",
           onClick: drawRectangle,
-          style: { stretch: "horizontal", margin: "3px" },
+          style: { stretch: "horizontal", margin: "3px", backgroundColor:"#ffffff" },
         }),
         ui.Button({
           label: symbol.polygon + " Polygon",
           onClick: drawPolygon,
-          style: { stretch: "horizontal", margin: "3px" },
+          style: { stretch: "horizontal", margin: "3px", backgroundColor:"#ffffff" },
         }),
         ui.Button({
           label: symbol.point + " Point",
           onClick: drawPoint,
-          style: { stretch: "horizontal", margin: "3px" },
+          style: { stretch: "horizontal", margin: "3px", backgroundColor:"#ffffff" },
         }),
       ],
       ui.Panel.Layout.flow("horizontal"),
@@ -5579,6 +5582,7 @@ function notesButtonHandler() {
 var notesButton = ui.Button({
   label: "See notes",
   onClick: notesButtonHandler,
+  style:{ backgroundColor:"#ffffff"}
 });
 var notesPanel = ui.Panel({
   widgets: [
@@ -5796,14 +5800,14 @@ function darkMap() {
 }
 
 infoPanel.style().set({backgroundColor: "CFE4D3"})
-panelBreak100.style().set({backgroundColor: "CFE4D3"})
+// panelBreak100.style().set({backgroundColor: "CFE4D3"})
 notesButton.style().set({backgroundColor: "CFE4D3"})
 intro.style().set({backgroundColor: "CFE4D3"})
-panelBreak25.style().set({backgroundColor: "CFE4D3"})
+// panelBreak25.style().set({backgroundColor: "CFE4D3"})
 mapComparison.style().set({backgroundColor: "CFE4D3"})
-panelBreak50.style().set({backgroundColor: "CFE4D3"})
+// panelBreak50.style().set({backgroundColor: "CFE4D3"})
 timeSeries.style().set({backgroundColor: "CFE4D3"})
-panelBreak51.style().set({backgroundColor: "CFE4D3"})
+// panelBreak51.style().set({backgroundColor: "CFE4D3"})
 pnlRun.style().set({backgroundColor: "CFE4D3"})
 leftDatePanel.style().set({backgroundColor: "CFE4D3"})
 pnlCitySelector.style().set({backgroundColor: "CFE4D3"})
