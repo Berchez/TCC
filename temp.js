@@ -4214,7 +4214,7 @@ var intro = ui.Panel([
       backgroundColor: "CFE4D3",
     },
   }),
-  ui.Label("An application to visualize air pollutant time series data."),
+  ui.Label({value:"An application to visualize air pollutant time series data.", style:{ backgroundColor:"CFE4D3"}}),
 ]);
 
 var leftSliderDate = ui.DateSlider({
@@ -4222,7 +4222,7 @@ var leftSliderDate = ui.DateSlider({
   end: new Date(),
   value: "2020-01-01",
   period: 1,
-  style: { stretch: "horizontal", shown: true },
+  style: { stretch: "horizontal", shown: true, backgroundColor:"CFE4D3" },
 });
 leftSliderDate.setDisabled(false);
 
@@ -4231,7 +4231,7 @@ var rightSliderDate = ui.DateSlider({
   end: new Date(),
   value: "2021-01-01",
   period: 1,
-  style: { stretch: "horizontal", shown: true },
+  style: { stretch: "horizontal", shown: true, backgroundColor:"CFE4D3" },
 });
 rightSliderDate.setDisabled(false);
 
@@ -4247,7 +4247,7 @@ var cloudFracSlider = ui.Slider({
   max: 100,
   value: cloudPct,
   step: 1,
-  style: { stretch: "horizontal" },
+  style: { stretch: "horizontal", backgroundColor:"CFE4D3" },
 });
 cloudFracSlider.setDisabled(true);
 var leftDateLabel = ui.Label({
@@ -4256,12 +4256,13 @@ var leftDateLabel = ui.Label({
     width: dateSliderLabelWidth,
     color: "000",
     padding: "25px 0px 0px 0px",
+   backgroundColor:"CFE4D3"
   },
 });
 var leftDatePanel = ui.Panel({
   widgets: [leftDateLabel, leftSliderDate],
   layout: ui.Panel.Layout.flow("horizontal"),
-  style: { stretch: "horizontal" },
+  style: { stretch: "horizontal", backgroundColor:"CFE4D3" },
 });
 
 var rightDateLabel = ui.Label({
@@ -4270,12 +4271,14 @@ var rightDateLabel = ui.Label({
     width: dateSliderLabelWidth,
     color: "000",
     padding: "25px 0px 0px 0px",
+    backgroundColor:"CFE4D3"
   },
 });
 var rightDatePanel = ui.Panel({
   widgets: [rightDateLabel, rightSliderDate],
   layout: ui.Panel.Layout.flow("horizontal"),
-  style: { stretch: "horizontal" },
+  style: { stretch: "horizontal",
+  backgroundColor:"CFE4D3" },
 });
 var minVis = ui.Slider({
   min: thisData.viewWindow.min + 0.0,
@@ -4308,16 +4311,16 @@ var swipeSwitchIndex = 11;
 var mapComparison = ui.Panel([
   ui.Label({
     value: "Map Comparison",
-    style: { fontSize: "24px", fontWeight: "bold" },
+    style: { fontSize: "24px", fontWeight: "bold", backgroundColor:"CFE4D3" },
   }),
   ui.Label({
     value: "1. Gas and Aerosol:",
-    style: { fontWeight: "bold", fontSize: "18px" },
+    style: { fontWeight: "bold", fontSize: "18px", backgroundColor:"CFE4D3" },
   }),
   dataSelectPanel,
   ui.Label({
     value: "2. Dates:",
-    style: { fontWeight: "bold", fontSize: "18px" },
+    style: { fontWeight: "bold", fontSize: "18px", backgroundColor:"CFE4D3" },
   }),
   leftDatePanel,
   rightDatePanel,
@@ -4719,7 +4722,7 @@ function updateLeftSliderDate() {
       end: dates.lastDate,
       value: dates.selectedDate,
       period: 1,
-      style: { stretch: "horizontal" },
+      style: { stretch: "horizontal", backgroundColor:"CFE4D3" },
       onChange: leftDateHandler,
     });
     leftDatePanel.widgets().set(1, dateSelector);
@@ -4770,7 +4773,7 @@ function updateRightSliderDate() {
       end: dates.lastDate,
       value: dates.selectedDate,
       period: 1,
-      style: { stretch: "horizontal" },
+      style: { stretch: "horizontal", backgroundColor:"CFE4D3" },
       onChange: rightDateHandler,
     });
     rightDatePanel.widgets().set(1, dateSelector);
@@ -5381,11 +5384,11 @@ var timeSeries = ui.Panel({
   widgets: [
     ui.Label({
       value: "Regional Time Series",
-      style: { fontSize: "24px", fontWeight: "bold" },
+      style: { fontSize: "24px", fontWeight: "bold", backgroundColor:"CFE4D3" },
     }),
     ui.Label({
       value: "1. Select a drawing mode:", 
-      style: { fontWeight: "bold", fontSize: "18px" },
+      style: { fontWeight: "bold", fontSize: "18px", backgroundColor:"CFE4D3" },
     }),
     ui.Panel(
       [
@@ -5406,11 +5409,11 @@ var timeSeries = ui.Panel({
         }),
       ],
       ui.Panel.Layout.flow("horizontal"),
-      { margin: "10px" }
+      { margin: "10px", backgroundColor:"CFE4D3" }
     ),
     ui.Label({
       value: "2. Select state.",
-      style: { fontWeight: "bold", fontSize: "18px" },
+      style: { fontWeight: "bold", fontSize: "18px", backgroundColor:"CFE4D3" },
     }),
     pnlStateSelector,
     lblCity,
@@ -5791,3 +5794,18 @@ function darkMap() {
     },
   ];
 }
+
+infoPanel.style().set({backgroundColor: "CFE4D3"})
+panelBreak100.style().set({backgroundColor: "CFE4D3"})
+notesButton.style().set({backgroundColor: "CFE4D3"})
+intro.style().set({backgroundColor: "CFE4D3"})
+panelBreak25.style().set({backgroundColor: "CFE4D3"})
+mapComparison.style().set({backgroundColor: "CFE4D3"})
+panelBreak50.style().set({backgroundColor: "CFE4D3"})
+timeSeries.style().set({backgroundColor: "CFE4D3"})
+panelBreak51.style().set({backgroundColor: "CFE4D3"})
+pnlRun.style().set({backgroundColor: "CFE4D3"})
+leftDatePanel.style().set({backgroundColor: "CFE4D3"})
+pnlCitySelector.style().set({backgroundColor: "CFE4D3"})
+pnlStateSelector.style().set({backgroundColor: "CFE4D3"})
+dataSelectPanel.style().set({backgroundColor: "CFE4D3"})
