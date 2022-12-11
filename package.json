@@ -1,19 +1,25 @@
 {
   "name": "tcc",
   "version": "1.0.0",
-  "description": "tcc",
+  "description": "",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Berchez/TCC.git"
+    "url": "git+https://github.com/Berchez/GAMBAR-TCC.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/Berchez/TCC/issues"
+    "url": "https://github.com/Berchez/GAMBAR-TCC/issues"
   },
-  "homepage": "https://github.com/Berchez/TCC#readme"
+  "homepage": "https://github.com/Berchez/GAMBAR-TCC#readme",
+  "devDependencies": {
+    "eslint": "^8.24.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "prettier": "^2.7.1"
+  }
 }
