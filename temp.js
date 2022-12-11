@@ -4038,7 +4038,7 @@ var dataInfo = {
     },
     baseline: 0,
   },
-  
+
 };
 var dateInfo = {
   left: { selected: "" },
@@ -4172,13 +4172,13 @@ function cleanCity(){
 
 
 function cleanState(){
-  
+
   stateSelector.setValue(null);
   lblCity.style().set("shown", false);
   pnlCitySelector.style().set("shown", false);
   cleanCity()//clean selected city
-  
-  cityStateButton.setLabel("Run"); 
+
+  cityStateButton.setLabel("Run");
 
 }
 
@@ -4204,20 +4204,8 @@ function cleanState(){
 var infoPanel = ui.Panel({ style: { width: "27%", maxWidth: "40%" } });
 
 // Create an introduction panel.
-var gambar = ui.Label({
-    value: "GAMBAR",
-    style: {
-      fontSize: "32px",
-      fontWeight: "bold",
-      textDecoration: "underline",
-      backgroundColor: "CFE4D3",
-    },
-  })
-  
-var intro = ui.Panel([
-  gambar,
-  ui.Label({value:"An application to visualize air pollutant time series data.", style:{ backgroundColor:"CFE4D3"}}),
-]);
+
+var intro = ui.Label({value:"An application to visualize air pollutant time series data.", style:{ backgroundColor:"CFE4D3"}});
 
 var leftSliderDate = ui.DateSlider({
   start: "2010-01-01",
@@ -4473,8 +4461,8 @@ var bigMap = ui.Map({
   center: { lat: -3.732708, lon: -61.479492, zoom: 4.5 },
 });
 
-bigMap.addLayer(bioma_amazonico, {}, "Amazonia");
-bigMap.setOptions("HYBRID");
+bigMap.addLayer(bioma_amazonico, {}, "Amazonia", true, 0.25);
+bigMap.setOptions("TERRAIN");
 
 // Set 12 maps
 var months = [
@@ -4573,6 +4561,7 @@ function updateCloudFracSlider(val) {
   // updateLeftSliderDate();
   // updateRightSliderDate();
   updateMaps(false,'');
+
   aoi.area(1000).evaluate(function (area) {
     aoiArea = area;
     if (area > maxAoiArea) {
@@ -4591,7 +4580,7 @@ function updateCloudFracSlider(val) {
 cloudFracSlider.onChange(updateCloudFracSlider);
 
 function citySelectorOnChange(){
-  cityStateButton.setLabel("Run by city"); 
+  cityStateButton.setLabel("Run by city");
 }
 
 function updateMaps(isDraw,aoi) {
@@ -4626,7 +4615,7 @@ function updateMaps(isDraw,aoi) {
     return;
   }
   var timeDifference = ((finalTotalDate.getTime() - initialTotalDate.getTime()) /1000/60/60/24)
-  
+
   //Compara se o intervalo de tempo eh menor que um ano
   if (timeDifference < 365) {
     alert("Time span must be greater than one year!");
@@ -5167,6 +5156,7 @@ function draw12mapsChart(aoi) {
     removeLayer("Amazonia","12maps",i);
   }
   updateMaps(true,aoi)
+
 }
 
 // Function to plot chart on drawing events.
@@ -5268,11 +5258,11 @@ function stateSelectorChangeHandler(){
   citySelectorHandler(stateSelector.getValue());
   lblCity.style().set("shown", true);
   pnlCitySelector.style().set("shown", true);
-  cityStateButton.setLabel("Run by state"); 
+  cityStateButton.setLabel("Run by state");
 }
 
 var stateSelector = ui.Select({
-  items: statesToSelector, 
+  items: statesToSelector,
   onChange: stateSelectorChangeHandler,
   style: {width: "113px"},
 });
@@ -5295,10 +5285,12 @@ function changeStateHandler() {
     var stateSelectedReturn = estados_amazonia.filter(ee.Filter.eq('SIGLA',selectedState.toString())); //Find state
     cityOrState = stateSelectedReturn.geometry(); //Get state geometry
     updateMaps("state",cityOrState)
+
 }
 
 function updateMapsWithoutSelectedArea() {
   updateMaps(null,'')
+
 }
 
 var cityOrState;
@@ -5353,6 +5345,7 @@ function resetAllHandler() {
   cleanCity()
   cleanState()
   updateMaps(false,'')
+
   bigMap.addLayer(bioma_amazonico, {}, "Amazonia");
   bigMap.centerObject(bioma_amazonico);
 }
@@ -5362,6 +5355,17 @@ var pnlRun = ui.Panel({
   widgets: [cityStateButton, resetAllButton],
   layout: ui.Panel.Layout.flow("horizontal"),
   style: { stretch: "horizontal"},
+})
+
+
+//Define color scale
+var pnlColorScale = ui.Panel({
+    widgets: [
+        ui.Label({ value: "4. Adjust palette stretch:" }),
+        stretchPanel,
+        ui.Label("[legend]"),
+        ui.Label("[swipeSwitch]")
+    ]
 })
 
 
@@ -5390,7 +5394,7 @@ var timeSeries = ui.Panel({
       style: { fontSize: "24px", fontWeight: "bold", backgroundColor:"CFE4D3" },
     }),
     ui.Label({
-      value: "1. Select a drawing mode:", 
+      value: "1. Select a drawing mode:",
       style: { fontWeight: "bold", fontSize: "18px", backgroundColor:"CFE4D3" },
     }),
     ui.Panel(
