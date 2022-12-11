@@ -1,0 +1,19 @@
+{
+  "name": "tcc",
+  "version": "1.0.0",
+  "description": "tcc",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Berchez/TCC.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Berchez/TCC/issues"
+  },
+  "homepage": "https://github.com/Berchez/TCC#readme"
+}
