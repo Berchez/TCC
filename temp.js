@@ -1,4 +1,3 @@
-/* eslint-disable no-undef */
 var bioma_amazonico = ee.FeatureCollection("users/joaobianco/amazonia");
 var cidades_amazonia = ee.FeatureCollection(
   "users/joaobianco/cidades_amazonia"
@@ -4450,10 +4449,10 @@ for (var i = 0; i < 12; i++) {
   map.style().set("maxHeight", "10%");
   map.style().set("margin", "8px");
   // map.addLayer(composite, vis[label])
-  var img = compositeImages(date);
-  img = img.clipToCollection(bioma_amazonico);
+  // var img = compositeImages(date);
+  // img = img.clipToCollection(bioma_amazonico);
 
-  map.layers().set(0, ui.Map.Layer(img, thisData.visParams, null, true, 0.55));
+  // map.layers().set(0, ui.Map.Layer(img, thisData.visParams, null, true, 0.55));
   map.add(ui.Label(months[i]));
   map.setCenter(-61.479492, -3.732708);
   maps.push(map);
@@ -4597,7 +4596,7 @@ function updateMaps(isDraw, aoi) {
         //Verifica se eh um desenho ou nao
         if (isDraw === false) {
           temp = img.clipToCollection(bioma_amazonico);
-          maps[k - 1].centerObject(bioma_amazonico);
+          maps[k - 1].centerObject(bioma_amazonico,10);
         } else {
           temp = img.clip(aoi);
           maps[k - 1].centerObject(aoi, 6);
@@ -4610,6 +4609,8 @@ function updateMaps(isDraw, aoi) {
           temp = img.clip(aoi);
           maps[k - 1].centerObject(aoi, 4);
         }
+        setChart();
+        chartTimeSeries(aoi,true);
         maps[k - 1]
           .layers()
           .set(
@@ -4731,7 +4732,11 @@ rightMap.add(rightLabel);
 // ### CHART DATA ###
 // #############################################################################
 var firstChart = true;
-function chartTimeSeries() {
+function chartTimeSeries(area, isPredefined) {
+  if(isPredefined){
+    aoi = area
+    print('entrei aqui')
+  }
   var no2ImgTs = ee
     .ImageCollection(thisData.colId)
     .filterBounds(aoi)
@@ -5099,7 +5104,7 @@ var stateSelector = ui.Select({
 
 var lblCity = ui.Label({
   value: "3. Select city.",
-  style: { fontWeight: "bold", fontSize: "18px", shown: false },
+  style: { fontWeight: "bold", fontSize: "18px", shown: false},
 });
 
 //filtra o municipio pelo numero dele
@@ -5317,7 +5322,7 @@ function clearGeometry() {
 }
 // Define function for dealing with a click on the rectangle button.
 function drawRectangle() {
-  drawType = "rectangle";
+  var drawType = "rectangle";
   clearGeometry();
   clearRightGeom();
   drawingTools.setShape("rectangle");
@@ -5325,7 +5330,7 @@ function drawRectangle() {
 }
 // Define function for dealing with a click on the polygon button.
 function drawPolygon() {
-  drawType = "polygon";
+  var drawType = "polygon";
   clearGeometry();
   clearRightGeom();
   drawingTools.setShape("polygon");
@@ -5333,7 +5338,7 @@ function drawPolygon() {
 }
 // Define function for dealing with a click on the point button.
 function drawPoint() {
-  drawType = "point";
+  var drawType = "point";
   clearGeometry();
   clearRightGeom();
   drawingTools.setShape("point");
@@ -5673,3 +5678,4 @@ leftDatePanel.style().set({ backgroundColor: "CFE4D3" });
 pnlCitySelector.style().set({ backgroundColor: "CFE4D3" });
 pnlStateSelector.style().set({ backgroundColor: "CFE4D3" });
 dataSelectPanel.style().set({ backgroundColor: "CFE4D3" });
+lblCity.style().set({ backgroundColor: "CFE4D3" })
