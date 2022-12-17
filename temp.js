@@ -3892,13 +3892,13 @@ var maxAoiArea = 8e11;
 var aoiArea = null;
 // Define vis palette:
 var palette = [
-  "000004",
-  "2C105C",
-  "711F81",
-  "B63679",
-  "EE605E",
-  "FDAE78",
   "FCFDBF",
+  "FDAE78",
+  "EE605E",
+  "B63679",
+  "711F81",
+  "2C105C",
+  "000004",
 ];
 // Define data options.
 var dataInfo = {
@@ -4098,6 +4098,7 @@ ui.url.set("aoi", aoi.toGeoJSONString());
 var cloudPct = ui.url.get("cloud", 10);
 ui.url.set("cloud", cloudPct);
 var cloudFrac = cloudPct / 100;
+var legendIndex = 10; 
 var leftSliderDateUrl = ui.url.get("leftdate", "2020-01-01");
 ui.url.set("leftdate", leftSliderDateUrl);
 var rightSliderDateUrl = ui.url.get("rightdate", "2020-02-01");
@@ -4162,9 +4163,14 @@ var infoPanel = ui.Panel({ style: { width: "27%", maxWidth: "40%" } });
 
 // Create an introduction panel.
 
+var introGAMBAR = ui.Label({
+  value: "Gas Monitor Brazilian Amazon Rainforest:",
+  style: { backgroundColor: "CFE4D3", fontWeight: 'bold', margin:'8px 0 1px 8px', fontSize: '16px'},
+});
+
 var intro = ui.Label({
   value: "An application to visualize air pollutant time series data.",
-  style: { backgroundColor: "CFE4D3" },
+  style: { backgroundColor: "CFE4D3", margin:'0 0 4px 8px', fontSize: '14px'},
 });
 
 var leftSliderDate = ui.DateSlider({
@@ -4277,6 +4283,7 @@ var mapComparison = ui.Panel([
 ]);
 
 // Add widgets to the info panel.
+infoPanel.add(introGAMBAR)
 infoPanel.add(intro);
 var panelBreak25 = ui.Panel(null, null, {
   stretch: "horizontal",
@@ -4853,7 +4860,7 @@ function chartTimeSeries(area, isPredefined) {
       yProperty: "p50",
       seriesProperty: "year",
     })
-    .setChartType("LineChart")
+    .setChartType("ColumnChart")
     .setOptions({
       height: 245,
       curveType: "function",
@@ -5060,6 +5067,8 @@ if (chartStatus == "cont") {
   tsChart.widgets().get(1).style().set({ shown: false });
   tsChart.widgets().get(2).style().set({ shown: true });
 }
+var chartInfo = ui.Label({value:"Chart controller:", style: {backgroundColor:"CFE4D3", fontSize:'18px', fontWeight:'bold'}})
+
 var chartButton = ui.Button(chartButtonLabel, switchChart);
 function switchChart() {
   if (chartStatus == "cont") {
@@ -5085,6 +5094,63 @@ function setChart() {
     tsChart.widgets().get(2).style().set({ shown: true });
   }
 }
+
+// ############################################################################# 
+// ### MAP LEGEND SETUP ### 
+// #############################################################################  
+// Creates a color bar thumbnail image for use in legend from the given color 
+// palette. 
+function makeColorBarParams(palette) { 
+  return { 
+    bbox: [0, 0, 1, 0.1], 
+    dimensions: '100x10', 
+    format: 'png', 
+    min: 0, 
+    max: 1, 
+    palette: palette, 
+  }; 
+}  
+
+function makeLegend() {
+  // Create the color bar for the legend.
+  var colorBar = ui.Thumbnail({
+    image: ee.Image.pixelLonLat().select(0),
+    params: makeColorBarParams(thisData.visParams.palette),
+    style: { stretch: "horizontal", margin: "0px 8px", maxHeight: "20px",backgroundColor: "CFE4D3" },
+  });
+
+  // Create a panel with three numbers for the legend.
+  var legendLabels = ui.Panel({
+    widgets: [
+      ui.Label(thisData.visParams.min, { margin: "4px 8px", fontSize: "12px",backgroundColor: "CFE4D3" }), //
+      ui.Label(
+        thisData.visParams.max / 2, //
+        {
+          margin: "4px 8px",
+          textAlign: "center",
+          stretch: "horizontal",
+          fontSize: "12px",
+          backgroundColor: "CFE4D3"
+        }
+      ),
+      ui.Label(thisData.visParams.max, { margin: "4px 8px", fontSize: "12px",backgroundColor: "CFE4D3" }),
+    ],
+    layout: ui.Panel.Layout.flow("horizontal"),
+    style:{backgroundColor: "CFE4D3"}
+  });
+
+  var legendTitle = ui.Label({
+    value: thisData.legendLabel + " 9-day mean",
+    style: { fontWeight: "bold", fontSize: "12px" ,backgroundColor: "CFE4D3"},
+  });
+
+  var legendPanel = ui.Panel([legendTitle, colorBar, legendLabels]);
+  legendPanel.style().set({backgroundColor: "CFE4D3"})
+  legendPanel.style().set({border:"1px dotted #333"})
+  mapComparison.widgets().set(legendIndex, legendPanel);
+}
+// Add the legend to the info panel
+makeLegend();
 
 //Define states
 var statesToSelector = ["AC", "AM", "AP", "MA", "MT", "PA", "RO", "RR", "TO"];
@@ -5432,6 +5498,12 @@ var panelBreak100 = ui.Panel(null, null, {
   backgroundColor: "000",
   margin: "8px 0px 8px 0px",
 });
+var panelBreak101 = ui.Panel(null, null, {
+  stretch: "horizontal",
+  height: "1px",
+  backgroundColor: "000",
+  margin: "8px 0px 8px 0px",
+});
 var notesShow = false;
 function notesButtonHandler() {
   if (notesShow) {
@@ -5469,6 +5541,9 @@ var notesPanel = ui.Panel({
   style: { shown: false },
 });
 infoPanel.add(panelBreak100);
+infoPanel.add(chartInfo)
+infoPanel.add(chartButton)
+infoPanel.add(panelBreak101);
 infoPanel.add(notesButton);
 infoPanel.add(notesPanel);
 
