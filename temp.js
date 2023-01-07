@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 var bioma_amazonico = ee.FeatureCollection("users/joaobianco/amazonia");
 var cidades_amazonia = ee.FeatureCollection(
   "users/joaobianco/cidades_amazonia"
@@ -4098,7 +4099,7 @@ ui.url.set("aoi", aoi.toGeoJSONString());
 var cloudPct = ui.url.get("cloud", 10);
 ui.url.set("cloud", cloudPct);
 var cloudFrac = cloudPct / 100;
-var legendIndex = 10; 
+var legendIndex = 10;
 var leftSliderDateUrl = ui.url.get("leftdate", "2020-01-01");
 ui.url.set("leftdate", leftSliderDateUrl);
 var rightSliderDateUrl = ui.url.get("rightdate", "2020-02-01");
@@ -4165,12 +4166,17 @@ var infoPanel = ui.Panel({ style: { width: "27%", maxWidth: "40%" } });
 
 var introGAMBAR = ui.Label({
   value: "Gas Monitor Brazilian Amazon Rainforest:",
-  style: { backgroundColor: "CFE4D3", fontWeight: 'bold', margin:'8px 0 1px 8px', fontSize: '16px'},
+  style: {
+    backgroundColor: "CFE4D3",
+    fontWeight: "bold",
+    margin: "8px 0 1px 8px",
+    fontSize: "16px",
+  },
 });
 
 var intro = ui.Label({
   value: "An application to visualize air pollutant time series data.",
-  style: { backgroundColor: "CFE4D3", margin:'0 0 4px 8px', fontSize: '14px'},
+  style: { backgroundColor: "CFE4D3", margin: "0 0 4px 8px", fontSize: "14px" },
 });
 
 var leftSliderDate = ui.DateSlider({
@@ -4283,7 +4289,7 @@ var mapComparison = ui.Panel([
 ]);
 
 // Add widgets to the info panel.
-infoPanel.add(introGAMBAR)
+infoPanel.add(introGAMBAR);
 infoPanel.add(intro);
 var panelBreak25 = ui.Panel(null, null, {
   stretch: "horizontal",
@@ -4341,20 +4347,6 @@ function dataSelectorHandler() {
 
   // Update map data?!
   // updateMaps(false,'');
-  aoi.area(1000).evaluate(function (area) {
-    aoiArea = area;
-    if (area > maxAoiArea) {
-      print("Drawn geometry is too large.");
-      tsChart.widgets().get(0).style().set({ shown: true });
-      tsChart.widgets().get(1).style().set({ shown: false });
-      tsChart.widgets().get(2).style().set({ shown: false });
-      return;
-    } else {
-      tsChart.widgets().get(0).style().set({ shown: false });
-      setChart();
-      chartTimeSeries();
-    }
-  });
 }
 dataSelector.onChange(dataSelectorHandler);
 // #############################################################################
@@ -4545,6 +4537,21 @@ function citySelectorOnChange() {
 }
 
 function updateMaps(isDraw, aoi) {
+  aoi.area(1000).evaluate(function (area) {
+    aoiArea = area;
+    if (area > maxAoiArea) {
+      print("Drawn geometry is too large.");
+      tsChart.widgets().get(0).style().set({ shown: true });
+      tsChart.widgets().get(1).style().set({ shown: false });
+      tsChart.widgets().get(2).style().set({ shown: false });
+      return;
+    } else {
+      tsChart.widgets().get(0).style().set({ shown: false });
+      setChart();
+      chartTimeSeries();
+    }
+  });
+
   if (typeof isDraw === "object") {
     isDraw = false; //Define false if not pass parameter
   }
@@ -4603,7 +4610,7 @@ function updateMaps(isDraw, aoi) {
         //Verifica se eh um desenho ou nao
         if (isDraw === false) {
           temp = img.clipToCollection(bioma_amazonico);
-          maps[k - 1].centerObject(bioma_amazonico,10);
+          maps[k - 1].centerObject(bioma_amazonico, 10);
         } else {
           temp = img.clip(aoi);
           maps[k - 1].centerObject(aoi, 6);
@@ -4617,7 +4624,7 @@ function updateMaps(isDraw, aoi) {
           maps[k - 1].centerObject(aoi, 4);
         }
         setChart();
-        chartTimeSeries(aoi,true);
+        chartTimeSeries(aoi, true);
         maps[k - 1]
           .layers()
           .set(
@@ -4740,9 +4747,9 @@ rightMap.add(rightLabel);
 // #############################################################################
 var firstChart = true;
 function chartTimeSeries(area, isPredefined) {
-  if(isPredefined){
-    aoi = area
-    print('entrei aqui')
+  if (isPredefined) {
+    aoi = area;
+    print("entrei aqui");
   }
   var no2ImgTs = ee
     .ImageCollection(thisData.colId)
@@ -5014,6 +5021,7 @@ function draw12mapsChart(aoi) {
   for (var i = 0; i < 12; i++) {
     removeLayer("Amazonia", "12maps", i);
   }
+
   updateMaps(true, aoi);
 }
 
@@ -5067,7 +5075,10 @@ if (chartStatus == "cont") {
   tsChart.widgets().get(1).style().set({ shown: false });
   tsChart.widgets().get(2).style().set({ shown: true });
 }
-var chartInfo = ui.Label({value:"Chart controller:", style: {backgroundColor:"CFE4D3", fontSize:'18px', fontWeight:'bold'}})
+var chartInfo = ui.Label({
+  value: "Chart controller:",
+  style: { backgroundColor: "CFE4D3", fontSize: "18px", fontWeight: "bold" },
+});
 
 var chartButton = ui.Button(chartButtonLabel, switchChart);
 function switchChart() {
@@ -5095,34 +5106,43 @@ function setChart() {
   }
 }
 
-// ############################################################################# 
-// ### MAP LEGEND SETUP ### 
-// #############################################################################  
-// Creates a color bar thumbnail image for use in legend from the given color 
-// palette. 
-function makeColorBarParams(palette) { 
-  return { 
-    bbox: [0, 0, 1, 0.1], 
-    dimensions: '100x10', 
-    format: 'png', 
-    min: 0, 
-    max: 1, 
-    palette: palette, 
-  }; 
-}  
+// #############################################################################
+// ### MAP LEGEND SETUP ###
+// #############################################################################
+// Creates a color bar thumbnail image for use in legend from the given color
+// palette.
+function makeColorBarParams(palette) {
+  return {
+    bbox: [0, 0, 1, 0.1],
+    dimensions: "100x10",
+    format: "png",
+    min: 0,
+    max: 1,
+    palette: palette,
+  };
+}
 
 function makeLegend() {
   // Create the color bar for the legend.
   var colorBar = ui.Thumbnail({
     image: ee.Image.pixelLonLat().select(0),
     params: makeColorBarParams(thisData.visParams.palette),
-    style: { stretch: "horizontal", margin: "0px 8px", maxHeight: "20px",backgroundColor: "CFE4D3" },
+    style: {
+      stretch: "horizontal",
+      margin: "0px 8px",
+      maxHeight: "20px",
+      backgroundColor: "CFE4D3",
+    },
   });
 
   // Create a panel with three numbers for the legend.
   var legendLabels = ui.Panel({
     widgets: [
-      ui.Label(thisData.visParams.min, { margin: "4px 8px", fontSize: "12px",backgroundColor: "CFE4D3" }), //
+      ui.Label(thisData.visParams.min, {
+        margin: "4px 8px",
+        fontSize: "12px",
+        backgroundColor: "CFE4D3",
+      }), //
       ui.Label(
         thisData.visParams.max / 2, //
         {
@@ -5130,23 +5150,27 @@ function makeLegend() {
           textAlign: "center",
           stretch: "horizontal",
           fontSize: "12px",
-          backgroundColor: "CFE4D3"
+          backgroundColor: "CFE4D3",
         }
       ),
-      ui.Label(thisData.visParams.max, { margin: "4px 8px", fontSize: "12px",backgroundColor: "CFE4D3" }),
+      ui.Label(thisData.visParams.max, {
+        margin: "4px 8px",
+        fontSize: "12px",
+        backgroundColor: "CFE4D3",
+      }),
     ],
     layout: ui.Panel.Layout.flow("horizontal"),
-    style:{backgroundColor: "CFE4D3"}
+    style: { backgroundColor: "CFE4D3" },
   });
 
   var legendTitle = ui.Label({
     value: thisData.legendLabel + " 9-day mean",
-    style: { fontWeight: "bold", fontSize: "12px" ,backgroundColor: "CFE4D3"},
+    style: { fontWeight: "bold", fontSize: "12px", backgroundColor: "CFE4D3" },
   });
 
   var legendPanel = ui.Panel([legendTitle, colorBar, legendLabels]);
-  legendPanel.style().set({backgroundColor: "CFE4D3"})
-  legendPanel.style().set({border:"1px dotted #333"})
+  legendPanel.style().set({ backgroundColor: "CFE4D3" });
+  legendPanel.style().set({ border: "1px dotted #333" });
   mapComparison.widgets().set(legendIndex, legendPanel);
 }
 // Add the legend to the info panel
@@ -5170,7 +5194,7 @@ var stateSelector = ui.Select({
 
 var lblCity = ui.Label({
   value: "3. Select city.",
-  style: { fontWeight: "bold", fontSize: "18px", shown: false},
+  style: { fontWeight: "bold", fontSize: "18px", shown: false },
 });
 
 //filtra o municipio pelo numero dele
@@ -5187,6 +5211,7 @@ function changeStateHandler() {
     ee.Filter.eq("SIGLA", selectedState.toString())
   ); //Find state
   cityOrState = stateSelectedReturn.geometry(); //Get state geometry
+
   updateMaps("state", cityOrState);
 }
 
@@ -5388,7 +5413,6 @@ function clearGeometry() {
 }
 // Define function for dealing with a click on the rectangle button.
 function drawRectangle() {
-  var drawType = "rectangle";
   clearGeometry();
   clearRightGeom();
   drawingTools.setShape("rectangle");
@@ -5396,7 +5420,6 @@ function drawRectangle() {
 }
 // Define function for dealing with a click on the polygon button.
 function drawPolygon() {
-  var drawType = "polygon";
   clearGeometry();
   clearRightGeom();
   drawingTools.setShape("polygon");
@@ -5404,7 +5427,6 @@ function drawPolygon() {
 }
 // Define function for dealing with a click on the point button.
 function drawPoint() {
-  var drawType = "point";
   clearGeometry();
   clearRightGeom();
   drawingTools.setShape("point");
@@ -5541,8 +5563,8 @@ var notesPanel = ui.Panel({
   style: { shown: false },
 });
 infoPanel.add(panelBreak100);
-infoPanel.add(chartInfo)
-infoPanel.add(chartButton)
+infoPanel.add(chartInfo);
+infoPanel.add(chartButton);
 infoPanel.add(panelBreak101);
 infoPanel.add(notesButton);
 infoPanel.add(notesPanel);
@@ -5753,4 +5775,4 @@ leftDatePanel.style().set({ backgroundColor: "CFE4D3" });
 pnlCitySelector.style().set({ backgroundColor: "CFE4D3" });
 pnlStateSelector.style().set({ backgroundColor: "CFE4D3" });
 dataSelectPanel.style().set({ backgroundColor: "CFE4D3" });
-lblCity.style().set({ backgroundColor: "CFE4D3" })
+lblCity.style().set({ backgroundColor: "CFE4D3" });
