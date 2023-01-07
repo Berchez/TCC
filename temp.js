@@ -1,4 +1,5 @@
 /* eslint-disable no-undef */
+var precipitacao = ee.ImageCollection("UCSB-CHG/CHIRPS/DAILY");
 var bioma_amazonico = ee.FeatureCollection("users/joaobianco/amazonia");
 var cidades_amazonia = ee.FeatureCollection(
   "users/joaobianco/cidades_amazonia"
@@ -4347,6 +4348,7 @@ function dataSelectorHandler() {
 
   // Update map data?!
   // updateMaps(false,'');
+  makeLegend()
 }
 dataSelector.onChange(dataSelectorHandler);
 // #############################################################################
@@ -4788,7 +4790,7 @@ function chartTimeSeries(area, isPredefined) {
 
   // Join images to target date by max difference.
   var joinFilter = ee.Filter.maxDifference({
-    difference: 8.64e7 * 4, // 4 days (9-day composite)
+    difference: 8.64e7 * 4, // 4 days (10-day composite)
     leftField: "millis",
     rightField: "millis",
   });
@@ -5164,13 +5166,14 @@ function makeLegend() {
   });
 
   var legendTitle = ui.Label({
-    value: thisData.legendLabel + " 9-day mean",
+    value: thisData.legendLabel + " 10-day mean",
     style: { fontWeight: "bold", fontSize: "12px", backgroundColor: "CFE4D3" },
   });
 
   var legendPanel = ui.Panel([legendTitle, colorBar, legendLabels]);
   legendPanel.style().set({ backgroundColor: "CFE4D3" });
   legendPanel.style().set({ border: "1px dotted #333" });
+  mapComparison.remove(mapComparison.widgets().get(6))
   mapComparison.widgets().set(legendIndex, legendPanel);
 }
 // Add the legend to the info panel
@@ -5440,7 +5443,7 @@ var chartNotes = ui.Label({
   style: { fontSize: "12px", margin: "8px 8px 1px 8px", fontWeight: "bold" },
 });
 var chartNote1 = ui.Label({
-  value: "• Lines represent 9-day statistics around 5-day increments.",
+  value: "• Lines represent 10-day statistics around 5-day increments.",
   style: { fontSize: "12px", margin: "8px 8px 1px 8px" },
 });
 var chartNote2 = ui.Label({
@@ -5463,7 +5466,7 @@ var mapNote1 = ui.Label({
   style: { fontSize: "12px", margin: "1px 8px 1px 8px" },
 });
 var mapNote2 = ui.Label({
-  value: "• Map data is the 9-day center mean around the target date.",
+  value: "• Map data is the 10-day center mean around the target date.",
   style: { fontSize: "12px", margin: "1px 8px 1px 8px" },
 });
 var urlNotes = ui.Label({
