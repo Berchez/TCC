@@ -4537,20 +4537,20 @@ function citySelectorOnChange() {
 }
 
 function updateMaps(isDraw, aoi) {
-  aoi.area(1000).evaluate(function (area) {
-    aoiArea = area;
-    if (area > maxAoiArea) {
-      print("Drawn geometry is too large.");
-      tsChart.widgets().get(0).style().set({ shown: true });
-      tsChart.widgets().get(1).style().set({ shown: false });
-      tsChart.widgets().get(2).style().set({ shown: false });
-      return;
-    } else {
-      tsChart.widgets().get(0).style().set({ shown: false });
-      setChart();
-      chartTimeSeries();
-    }
-  });
+  // aoi.area(1000).evaluate(function (area) {
+  //   aoiArea = area;
+  //   if (area > maxAoiArea) {
+  //     print("Drawn geometry is too large.");
+  //     tsChart.widgets().get(0).style().set({ shown: true });
+  //     tsChart.widgets().get(1).style().set({ shown: false });
+  //     tsChart.widgets().get(2).style().set({ shown: false });
+  //     return;
+  //   } else {
+  tsChart.widgets().get(0).style().set({ shown: false });
+  setChart();
+  chartTimeSeries();
+  //   }
+  // });
 
   if (typeof isDraw === "object") {
     isDraw = false; //Define false if not pass parameter
