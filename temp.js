@@ -4974,9 +4974,55 @@ function chartTimeSeries(area, isPredefined) {
         },
       },
     });
+    
+    
+    //TESTE
+    
+var startdate = ee.Date.fromYMD(2020,1,1);
+var enddate = ee.Date.fromYMD(2022,11,1);
+    
+    var precipitationData = ee.ImageCollection("UCSB-CHG/CHIRPS/DAILY")
+                    .select('precipitation')
+                    .filterDate('2020-01-01', '2022-12-31')
+                    .filterBounds(aoi);
+                    
+                    
+var years = ee.List.sequence(2020, 2022);
+var months = ee.List.sequence(1, 12);
 
-  tsChart.widgets().set(2, chart);
-  tsChart.widgets().set(1, fullTsChart);
+var byMonthYear = ee.ImageCollection.fromImages(
+  years.map(function(y) {
+    return months.map(function (m) {
+      return precipitationData
+        .filter(ee.Filter.calendarRange(y, y, 'year'))
+        .filter(ee.Filter.calendarRange(m, m, 'month'))
+        .mean()
+        .set('month', m).set('year', y);
+  });
+}).flatten());
+
+var chartParam = {
+ title: 'Monthly average Precipitation',
+  hAxis: {title: 'Time (month)'},
+  vAxis: {title: 'Average Precipitation (mm)'},
+};
+
+//Plot the chart
+var chartPrecipitation = ui.Chart.image.seriesByRegion({
+  imageCollection: byMonthYear,
+  regions: aoi,
+  reducer: ee.Reducer.mean(),
+  scale: 500,
+  xProperty: 'month',
+  // seriesProperty: 'PROJECT'
+}).setChartType("ColumnChart");
+//Print chart to console
+    chartPrecipitation.setOptions(chartParam)
+    
+    //FIM TESTE
+
+  // tsChart.widgets().set(2, chart);
+  tsChart.widgets().set(1, chartPrecipitation);
   setChart();
 }
 
