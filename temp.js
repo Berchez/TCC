@@ -3889,7 +3889,7 @@ function exibirInformacoes() {
 }
 
 // Max area
-var maxAoiArea = 8e11;
+var maxAoiArea = 8e15;
 var aoiArea = null;
 // Define vis palette:
 var palette = [
@@ -4347,7 +4347,7 @@ function dataSelectorHandler() {
 
   // Update map data?!
   // updateMaps(false,'');
-  makeLegend()
+  makeLegend();
 }
 dataSelector.onChange(dataSelectorHandler);
 // #############################################################################
@@ -4538,20 +4538,24 @@ function citySelectorOnChange() {
 }
 
 function updateMaps(isDraw, aoi) {
-  // aoi.area(1000).evaluate(function (area) {
-  //   aoiArea = area;
-  //   if (area > maxAoiArea) {
-  //     print("Drawn geometry is too large.");
-  //     tsChart.widgets().get(0).style().set({ shown: true });
-  //     tsChart.widgets().get(1).style().set({ shown: false });
-  //     tsChart.widgets().get(2).style().set({ shown: false });
-  //     return;
-  //   } else {
-  tsChart.widgets().get(0).style().set({ shown: false });
-  setChart();
-  chartTimeSeries();
-  //   }
-  // });
+  if (aoi === "") {
+    aoi = bioma_amazonico.geometry();
+  }
+
+  aoi.area(1000).evaluate(function (area) {
+    aoiArea = area;
+    if (area > maxAoiArea) {
+      print("Drawn geometry is too large.");
+      tsChart.widgets().get(0).style().set({ shown: true });
+      tsChart.widgets().get(1).style().set({ shown: false });
+      tsChart.widgets().get(2).style().set({ shown: false });
+      return;
+    } else {
+      tsChart.widgets().get(0).style().set({ shown: false });
+      setChart();
+      chartTimeSeries();
+    }
+  });
 
   if (typeof isDraw === "object") {
     isDraw = false; //Define false if not pass parameter
@@ -4624,8 +4628,7 @@ function updateMaps(isDraw, aoi) {
           temp = img.clip(aoi);
           maps[k - 1].centerObject(aoi, 4);
         }
-        setChart();
-        chartTimeSeries(aoi, true);
+
         maps[k - 1]
           .layers()
           .set(
@@ -4674,7 +4677,7 @@ var yoyChart = ui.Label({
   style: { position: "top-left", shown: false },
 });
 var tsChart = ui.Panel([noPlotLabel, contChart, yoyChart]);
-  tsChart.style().set({maxHeight: '250px'})
+tsChart.style().set({ maxHeight: "250px" });
 
 // #############################################################################
 // ### PREP FOR DEALING WITH GEOMETRY DRAWING ###
@@ -4974,49 +4977,54 @@ function chartTimeSeries(area, isPredefined) {
         },
       },
     });
-    
-    
-    //precipitation chart
-    
-  var precipitationData = ee.ImageCollection("UCSB-CHG/CHIRPS/DAILY")
-                  .select('precipitation')
-                  .filterDate('2020-01-01', '2022-12-31')
-                  .filterBounds(aoi);
-                    
-                    
-var years = ee.List.sequence(2020, 2022);
-var months = ee.List.sequence(1, 12);
 
-var byMonthYear = ee.ImageCollection.fromImages(
-  years.map(function(y) {
-    return months.map(function (m) {
-      return precipitationData
-        .filter(ee.Filter.calendarRange(y, y, 'year'))
-        .filter(ee.Filter.calendarRange(m, m, 'month'))
-        .mean()
-        .set('month', m).set('year', y);
-  });
-}).flatten());
+  //precipitation chart
 
-var chartParam = {
- title: 'Monthly average Precipitation',
-  hAxis: {title: 'Time (month)'},
-  vAxis: {title: 'Average Precipitation (mm)'},
-};
+  var precipitationData = ee
+    .ImageCollection("UCSB-CHG/CHIRPS/DAILY")
+    .select("precipitation")
+    .filterDate("2020-01-01", "2022-12-31")
+    .filterBounds(aoi);
 
-//Plot the chart
-var chartPrecipitation = ui.Chart.image.seriesByRegion({
-  imageCollection: byMonthYear,
-  regions: aoi,
-  reducer: ee.Reducer.mean(),
-  scale: 500,
-  xProperty: 'month',
-  // seriesProperty: 'PROJECT'
-}).setChartType("ColumnChart");
-//Print chart to console
-    chartPrecipitation.setOptions(chartParam)
-    
-    //Fim precipitation chart
+  var years = ee.List.sequence(2020, 2022);
+  var months = ee.List.sequence(1, 12);
+
+  var byMonthYear = ee.ImageCollection.fromImages(
+    years
+      .map(function (y) {
+        return months.map(function (m) {
+          return precipitationData
+            .filter(ee.Filter.calendarRange(y, y, "year"))
+            .filter(ee.Filter.calendarRange(m, m, "month"))
+            .mean()
+            .set("month", m)
+            .set("year", y);
+        });
+      })
+      .flatten()
+  );
+
+  var chartParam = {
+    title: "Monthly average Precipitation",
+    hAxis: { title: "Time (month)" },
+    vAxis: { title: "Average Precipitation (mm)" },
+  };
+
+  //Plot the chart
+  var chartPrecipitation = ui.Chart.image
+    .seriesByRegion({
+      imageCollection: byMonthYear,
+      regions: aoi,
+      reducer: ee.Reducer.mean(),
+      scale: 500,
+      xProperty: "month",
+      // seriesProperty: 'PROJECT'
+    })
+    .setChartType("ColumnChart");
+  //Print chart to console
+  chartPrecipitation.setOptions(chartParam);
+
+  //Fim precipitation chart
 
   tsChart.widgets().set(3, chartPrecipitation);
   tsChart.widgets().set(2, chart);
@@ -5090,20 +5098,6 @@ function drawChart() {
   ui.url.set("aoi", aoi.toGeoJSONString());
   // Set drawing mode back to null.
   drawingTools.setShape(null);
-  aoi.area(1000).evaluate(function (area) {
-    aoiArea = area;
-    if (area > maxAoiArea) {
-      print("Drawn geometry is too large.");
-      tsChart.widgets().get(0).style().set({ shown: true });
-      tsChart.widgets().get(1).style().set({ shown: false });
-      tsChart.widgets().get(2).style().set({ shown: false });
-      return;
-    } else {
-      tsChart.widgets().get(0).style().set({ shown: false });
-      setChart();
-      chartTimeSeries();
-    }
-  });
 }
 
 // #############################################################################
@@ -5217,7 +5211,7 @@ function makeLegend() {
   var legendPanel = ui.Panel([legendTitle, colorBar, legendLabels]);
   legendPanel.style().set({ backgroundColor: "CFE4D3" });
   legendPanel.style().set({ border: "1px dotted #333" });
-  mapComparison.remove(mapComparison.widgets().get(6))
+  mapComparison.remove(mapComparison.widgets().get(6));
   mapComparison.widgets().set(legendIndex, legendPanel);
 }
 // Add the legend to the info panel
