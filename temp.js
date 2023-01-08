@@ -1,5 +1,4 @@
 /* eslint-disable no-undef */
-var precipitacao = ee.ImageCollection("UCSB-CHG/CHIRPS/DAILY");
 var bioma_amazonico = ee.FeatureCollection("users/joaobianco/amazonia");
 var cidades_amazonia = ee.FeatureCollection(
   "users/joaobianco/cidades_amazonia"
@@ -4675,6 +4674,7 @@ var yoyChart = ui.Label({
   style: { position: "top-left", shown: false },
 });
 var tsChart = ui.Panel([noPlotLabel, contChart, yoyChart]);
+  tsChart.style().set({maxHeight: '250px'})
 
 // #############################################################################
 // ### PREP FOR DEALING WITH GEOMETRY DRAWING ###
@@ -4976,15 +4976,12 @@ function chartTimeSeries(area, isPredefined) {
     });
     
     
-    //TESTE
+    //precipitation chart
     
-var startdate = ee.Date.fromYMD(2020,1,1);
-var enddate = ee.Date.fromYMD(2022,11,1);
-    
-    var precipitationData = ee.ImageCollection("UCSB-CHG/CHIRPS/DAILY")
-                    .select('precipitation')
-                    .filterDate('2020-01-01', '2022-12-31')
-                    .filterBounds(aoi);
+  var precipitationData = ee.ImageCollection("UCSB-CHG/CHIRPS/DAILY")
+                  .select('precipitation')
+                  .filterDate('2020-01-01', '2022-12-31')
+                  .filterBounds(aoi);
                     
                     
 var years = ee.List.sequence(2020, 2022);
@@ -5019,10 +5016,11 @@ var chartPrecipitation = ui.Chart.image.seriesByRegion({
 //Print chart to console
     chartPrecipitation.setOptions(chartParam)
     
-    //FIM TESTE
+    //Fim precipitation chart
 
-  // tsChart.widgets().set(2, chart);
-  tsChart.widgets().set(1, chartPrecipitation);
+  tsChart.widgets().set(3, chartPrecipitation);
+  tsChart.widgets().set(2, chart);
+  tsChart.widgets().set(1, fullTsChart);
   setChart();
 }
 
