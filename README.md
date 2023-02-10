@@ -108,7 +108,7 @@ seguidos por outro gráfico que mostra a média mensal das chuvas ocorridas no p
     </td>
     <td align="center">
       <a href="https://gooogle.com">
-        <img height="100;" width="100px;"  src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_640.png" alt="Rodrigo Martins Pagliares"/><br>
+        <img height="100px;" width="100px;" width="100px;"  src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_640.png" alt="Rodrigo Martins Pagliares"/><br>
         <sub>
           <b>Rodrigo Pagliares</b>
         </sub>
