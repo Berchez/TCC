@@ -15,9 +15,9 @@
   </head>
   <body>
     <header>
-      <nav class="nav">
-        <div class="logo"><img src="" alt="" /></div>
-        <ul role="list" class="nav__items">
+      <nav class="nav flex">
+        <div class="logo"><img src="./img/logo.png" alt="GAMBAR" /></div>
+        <ul role="list" class="nav__items flex">
           <li><a href="#home">Início</a></li>
           <li><a href="#functionalities">Funcionalidades</a></li>
           <li><a href="#history">História</a></li>
@@ -26,8 +26,12 @@
       </nav>
     </header>
     <main>
-      <section id="hero">
+      <section
+        id="hero"
+        class="flex center--flex column--flex container text__center"
+      >
         <h3>Aplicativo para análise de poluição na Amazônia</h3>
+        <div class="spacer__line"></div>
         <h1>Gas Monitor Brazilian Amazon Rainforest</h1>
         <p>
           O gambar permite que geógrafos utilizem filtros como período, cidade,
@@ -35,65 +39,95 @@
           espaço-temporais da concentração de gases poluentes e aerossol na
           atmosfera sobre o bioma Amazônico brasileiro.
         </p>
-        <button>Acessar</button>
+        <a
+          href="https://joaobianco.users.earthengine.app/view/tcc"
+          target="_blank"
+          class="button"
+          >Acessar</a
+        >
       </section>
-      <section id="functionalities">
-        <h2>Conheça nossas Funcionalidades</h2>
+      <section class="container text__center" id="functionalities">
+        <img class="absolute folhasLT" src="./img/folhasLT.png" alt="" />
+        <img class="absolute folhasLB" src="./img/folhasLB.png" alt="" />
+        <img class="absolute folhasRT" src="./img/folhasRT.png" alt="" />
+        <img class="absolute folhasRB" src="./img/folhasRB.png" alt="" />
+        <div class="functionalities__content">
+          <h2>Conheça nossas Funcionalidades</h2>
+          <p>
+            O GAMBAR é um aplicativo destinado ao monitoramento de gases de
+            efeito estufa no bioma Amazônico brasileiro, utilizando-se de dados
+            oriundos do satélite Sentinel-5p da Agencia Espacial Europeia (ESA),
+            a partir do sensor Tropospheric Monitoring Instrument (TROPOMI). Os
+            dados monitorados servirão a gestores, tomadores de decisão e demais
+            setores da Sociedade no acesso gratuito aos dados dos gases Monóxido
+            de Carbono (CO), Dióxido de Nitrogênio (NO2), Metano (CH4), Ozônio
+            (O3), Dióxido de Enxofre (SO2) e Formaldeído (HCHO), bem como
+            Aerossóis, sob diversos recortes temporais e espaciais (bioma,
+            estados ou municípios). Além disso, o GAMBAR dispõem de analise de
+            series históricas da concentração dos gases supramencionados bem
+            como do regime pluviométrico.
+          </p>
+          <div class="cards">
+            <div class="card">
+              <img src="./img/fumaca.svg" alt="" />
+              <p>Monitorar Gases</p>
+            </div>
+            <div class="card">
+              <img src="./img/datas.svg" alt="" />
+              <p>Datas Customizadas</p>
+            </div>
+            <div class="card">
+              <img src="./img/area.svg" alt="" />
+              <p>Área Selecionável</p>
+            </div>
+            <div class="card">
+              <img src="./img/chuva.svg" alt="" />
+              <p>Monitorar Chuvas</p>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="container text__center" id="history">
+        <img class="absolute tucano" src="./img/tucano.png" alt="" />
+        <h2>História e desenvolvimento</h2>
         <p>
-          O GAMBAR é um aplicativo destinado ao monitoramento de gases de efeito
-          estufa no bioma Amazônico brasileiro, utilizando-se de dados oriundos
-          do satélite Sentinel-5p da Agencia Espacial Europeia (ESA), a partir
-          do sensor Tropospheric Monitoring Instrument (TROPOMI). Os dados
-          monitorados servirão a gestores, tomadores de decisão e demais setores
-          da Sociedade no acesso gratuito aos dados dos gases Monóxido de
-          Carbono (CO), Dióxido de Nitrogênio (NO2), Metano (CH4), Ozônio (O3),
-          Dióxido de Enxofre (SO2) e Formaldeído (HCHO), bem como Aerossóis, sob
-          diversos recortes temporais e espaciais (bioma, estados ou
-          municípios). Além disso, o GAMBAR dispõem de analise de series
-          históricas da concentração dos gases supramencionados bem como do
-          regime pluviométrico.
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Maxime
+          tempora sint dolorem saepe at doloremque id dolor, nulla vel ratione
+          laboriosam dignissimos qui vitae. Voluptate harum in facilis
+          consequatur commodi, dolore laborum quae reiciendis! Nulla enim dolore
+          ipsam quidem alias, odit vel laboriosam. Quaerat tenetur perferendis
+          molestiae aut suscipit ipsum rem nihil nobis illo voluptas officia, a,
+          expedita pariatur quo soluta voluptatibus consectetur, inventore
+          consequatur tempore! Quas quod reiciendis ullam fugit! Placeat magni,
+          mollitia id deleniti accusamus iure doloremque animi aspernatur
+          praesentium totam atque autem ipsam ex eum quas laborum! Voluptates
+          minus molestias labore repudiandae cupiditate. Nihil tempore voluptas
+          harum.
         </p>
-        <div class="cards">
-          <div class="card">
-            <img src="" alt="" />
-            <p>Monitorar Gases</p>
-          </div>
-          <div class="card">
-            <img src="" alt="" />
-            <p>Datas Customizadas</p>
-          </div>
-          <div class="card">
-            <img src="" alt="" />
-            <p>Área Selecionável</p>
-          </div>
-          <div class="card">
-            <img src="" alt="" />
-            <p>Monitorar Chuvas</p>
-          </div>
-        </div>
       </section>
-      <section id="history">
-        <h2>
-          <p></p>
-        </h2>
-      </section>
-      <section id="team">
+      <section class="text__center" id="team">
         <h2>Participantes</h2>
-        <div class="member--card">
-          <h2></h2>
-          <p></p>
-        </div>
-        <div class="member--card">
-          <h2></h2>
-          <p></p>
-        </div>
-        <div class="member--card">
-          <h2></h2>
-          <p></p>
-        </div>
-        <div class="member--card">
-          <h2></h2>
-          <p></p>
+        <div class="member__cards">
+          <div class="member--card">
+            <img src="./img/walter.jpeg" alt="" />
+            <h2>Walter Felipe D. Berchez</h2>
+            <p>Orientado</p>
+          </div>
+          <div class="member--card">
+            <img src="./img/joao.jpg" alt="" />
+            <h2>João Pedro S. Bianco</h2>
+            <p>Orientado</p>
+          </div>
+          <div class="member--card">
+            <img src="./img/pagliares.png" alt="" />
+            <h2>Rodrigo M. Pagliares</h2>
+            <p>Oriendator</p>
+          </div>
+          <div class="member--card">
+            <img src="./img/latuf.jpg" alt="" />
+            <h2>Marcelo de O. Latuf</h2>
+            <p>Coorientador</p>
+          </div>
         </div>
       </section>
     </main>
