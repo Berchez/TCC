@@ -32,8 +32,8 @@ de utilizar filtros para personalizar a exibição e análise dos dados, bem com
 
 Para acessá-lo, clique no link: [GAMBAR](https://joaobianco.users.earthengine.app/view/tcc)
 
-### Vídeo de apresentação
-[Apresentação GAMBAR](https://youtu.be/nLPNVPtsYgc)
+### Vídeo de apresentação:
+[![Apresentação do GAMBAR](https://img.youtube.com/vi/nLPNVPtsYgc/0.jpg)](https://www.youtube.com/watch?v=nLPNVPtsYgc)
 ---
 
 ## -:artificial_satellite:	Tecnologias utilizadas
