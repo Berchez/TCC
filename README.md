@@ -50,7 +50,7 @@ A figura a seguir apresenta o fluxo principal de execução do GAMBAR. Conforme 
 a parte interessada (stakeholder) seleciona inicialmente um determinado gás ou aerossóis. Na sequência, 
 o stakeholder estipula o intervalo de tempo para análise e delimita a área que se deseja coletar os dados.
 
-![fluxograma](https://i.imgur.com/SrGtqSB.png)
+![fluxograma](https://i.imgur.com/tXN39QU.png)
 
 A delimitação de área pode ser feita de três maneiras: 
 
