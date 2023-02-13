@@ -90,6 +90,12 @@ seguidos por outro gráfico que mostra a média mensal das chuvas ocorridas no p
 
 ---
 
+## Como executar o GAMBAR
+
+Para executar o GAMBAR, primeiro deve copiar o código-fonte presente na pasta "gambar" em "index.js". Depois acessar o [GEE](https://code.earthengine.google.com/), criar um novo projeto e colar o código-fonte do GAMBAR.
+
+---
+
 ## -:raising_hand_man: Colaboradores
 
 <table>
