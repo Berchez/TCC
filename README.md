@@ -32,6 +32,8 @@ de utilizar filtros para personalizar a exibição e análise dos dados, bem com
 
 Para acessá-lo, clique no link: [GAMBAR](https://joaobianco.users.earthengine.app/view/tcc)
 
+### Vídeo de apresentação:
+[![Apresentação do GAMBAR](https://img.youtube.com/vi/nLPNVPtsYgc/0.jpg)](https://www.youtube.com/watch?v=nLPNVPtsYgc)
 ---
 
 ## -:artificial_satellite:	Tecnologias utilizadas
@@ -50,7 +52,7 @@ A figura a seguir apresenta o fluxo principal de execução do GAMBAR. Conforme 
 a parte interessada (stakeholder) seleciona inicialmente um determinado gás ou aerossóis. Na sequência, 
 o stakeholder estipula o intervalo de tempo para análise e delimita a área que se deseja coletar os dados.
 
-![fluxograma](https://i.imgur.com/SrGtqSB.png)
+![fluxograma](https://i.imgur.com/tXN39QU.png)
 
 A delimitação de área pode ser feita de três maneiras: 
 
@@ -91,7 +93,7 @@ seguidos por outro gráfico que mostra a média mensal das chuvas ocorridas no p
 <table>
   <tr>
     <td align="center">
-      <a href="https://github.com/Berchez">
+      <a href="https://github.com/Berchez" target="_blank">
         <img src="https://user-images.githubusercontent.com/50505615/112755803-b64a2900-8fb8-11eb-9dee-f984d7e5eae5.jpeg" width="100px;" alt="Foto do Walter Berchez no GitHub"/><br>
         <sub>
           <b>Walter Berchez</b>
@@ -99,7 +101,7 @@ seguidos por outro gráfico que mostra a média mensal das chuvas ocorridas no p
       </a><br>
     </td>
     <td align="center">
-      <a href="https://github.com/brunafalcucci">
+      <a href="https://github.com/JoaoBianco" target="_blank">
         <img src="https://pps.whatsapp.net/v/t61.24694-24/290515843_178020644592115_7231720877167706396_n.jpg?ccb=11-4&oh=01_AdQzgijJ1aZV3td6X5ZFUo-Zw06VKjLYQVbxtYv3xBBoQA&oe=63F2CAC7" width="100px;" alt="Foto do João Bianco"/><br>
         <sub>
           <b>João Bianco</b>
@@ -107,16 +109,16 @@ seguidos por outro gráfico que mostra a média mensal das chuvas ocorridas no p
       </a><br>
     </td>
     <td align="center">
-      <a href="https://gooogle.com">
-        <img height="100;" width="100px;"  src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_640.png" alt="Rodrigo Martins Pagliares"/><br>
+      <a href="http://buscatextual.cnpq.br/buscatextual/visualizacv.do?metodo=apresentar&id=K4739548H8" target="_blank">
+        <img width="100px;" src="http://servicosweb.cnpq.br/wspessoa/servletrecuperafoto?tipo=1&id=K4739548H8" alt="Rodrigo Martins Pagliares"/><br>
         <sub>
           <b>Rodrigo Pagliares</b>
         </sub>
       </a>
     </td>
     <td align="center">
-      <a href="https://github.com/Murilo1234567">
-        <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_640.png" width="100px;" alt="Foto do Latuf"/><br>
+      <a href="http://buscatextual.cnpq.br/buscatextual/visualizacv.do?metodo=apresentar&id=K4739580Y4" target="_blank">
+        <img src="https://www.unifal-mg.edu.br/portal/wp-content/uploads/sites/52/2022/09/Marcelo-Latuf-300x300.jpg" width="100px;" alt="Foto do Latuf"/><br>
         <sub>
           <b>Marcelo Latuf</b>
         </sub>
