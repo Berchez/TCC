@@ -31,6 +31,7 @@ além da relação com a concentração de chuvas no bioma Amazônico brasileiro
 de utilizar filtros para personalizar a exibição e análise dos dados, bem como gerar relatórios com os resultados obtidos.
 
 Para acessá-lo, clique no link: [GAMBAR](https://joaobianco.users.earthengine.app/view/tcc)
+
 Para acessar o site de apresentação, clique no link: [Site](https://gambar-landingpage.vercel.app/)
 
 ### Vídeo de apresentação:
