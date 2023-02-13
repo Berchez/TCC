@@ -10,8 +10,8 @@
 
   --clr-gradient: linear-gradient(
     35deg,
-    hsl(132, 47%, 63%, 0.65),
-    hsl(132, 51%, 61%, 1)
+    rgba(27, 201, 62, 0.65),
+    rgb(54, 134, 70)
   );
 
   --clr-gradient-accent: linear-gradient(
@@ -146,7 +146,9 @@ select {
 }
 
 .container {
-  padding-inline: var(--spacer-container);
+  padding-left: 9.375vw;
+  padding-right: 9.375vw;
+
 }
 
 .spacer__line {
@@ -187,6 +189,8 @@ select {
   display: grid;
   grid-template-columns: repeat(1fr);
   gap: 1rem;
+  padding-left: 15%;
+  padding-right: 15%;
 }
 
 .card {
@@ -197,7 +201,7 @@ select {
 }
 
 .card > img {
-  width: min(20%, 100px);
+  width: min(25%, 100px);
 }
 
 /* Nav */
@@ -212,15 +216,26 @@ select {
   position: absolute;
   top: 0;
   width: 100%;
+
+  height: 7vh;
+}
+
+.logo > img {
+  height: 6vh;
 }
 
 .nav__items {
   gap: var(--spacer-700);
   flex-wrap: wrap;
+  cursor: pointer;
 }
 
 .nav__items li :is(a, a:visited) {
   color: white;
+}
+
+.nav__items > li > a:hover {
+  filter: brightness(70%);
 }
 
 /* Hero */
@@ -311,10 +326,15 @@ select {
 
 #history {
   position: relative;
-  background-image: url("./img/latuf.png");
+  background-image: url();
+  background: 
+     linear-gradient(0deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)),
+      url("./img/latuf.png");
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
+
+  
 
   padding-block: var(--spacer-900);
 }
@@ -323,6 +343,7 @@ select {
   font-size: var(--fs-600);
   line-height: 1;
   margin-bottom: var(--spacer-600);
+  
 }
 
 #history :is(p, h2) {
@@ -336,13 +357,16 @@ select {
   background: var(--clr-gradient-accent);
 
   padding-block: var(--spacer-800);
+  padding-top: 5%;
+  padding-bottom: 10%;
+
 }
 
 #team > h2 {
   font-size: var(--fs-600);
-  color: var(--clr-accent-2);
+  color: white;
 
-  padding-bottom: var(--spacer-600);
+  padding-bottom: var(--spacer-800);
 }
 
 .member__cards {
