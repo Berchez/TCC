@@ -21,6 +21,7 @@
   );
 
   --clr-black-200: hsl(0 0% 0% /0.25);
+  --clr-black-300: hsl(0 0% 0% /0.35);
   --clr-black-400: #333;
 
   --spacer-200: 0.25rem;
@@ -42,7 +43,7 @@
 }
 
 :is(p, h1, h2, h3, a) {
-  text-shadow: 0 4px 4px var(--clr-black-200);
+  text-shadow: 0 4px 4px var(--clr-black-300);
 }
 
 /* Reset CSS */
@@ -82,8 +83,9 @@ li > a {
 }
 
 /* Set core root defaults */
-html:focus-within {
-  scroll-behavior: smooth;
+html:focus-within,
+html {
+  scroll-behavior: smooth !important;
 }
 
 /* Set core body defaults */
@@ -366,6 +368,28 @@ select {
   aspect-ratio: 1/1;
 }
 
+/* Contato */
+
+#contato {
+  background-color: var(--clr-black-400);
+  padding-block: var(--spacer-600);
+}
+
+#contato > h2 {
+  font-size: var(--fs-600);
+  padding-bottom: var(--spacer-900);
+}
+
+.contato--wrapper {
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+.contato--wrapper > * {
+  padding-block: var(--spacer-700);
+}
+
+/* Media query */
 @media (min-width: 50em) {
   .container {
     --spacer-container: 5rem;
@@ -448,5 +472,9 @@ select {
   .member__cards {
     grid-template-columns: repeat(4, 1fr);
     gap: 0;
+  }
+
+  .contato--wrapper {
+    grid-template-columns: repeat(4, 1fr);
   }
 }
