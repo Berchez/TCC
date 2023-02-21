@@ -217,7 +217,8 @@ select {
   top: 0;
   width: 100%;
 
-  height: 7vh;
+  min-height: 7vh;
+  padding-block:2px;
 }
 
 .logo > img {
@@ -328,7 +329,7 @@ select {
   position: relative;
   background-image: url();
   background: 
-     linear-gradient(0deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)),
+     linear-gradient(0deg, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
       url("./img/latuf.png");
   background-position: center;
   background-repeat: no-repeat;
