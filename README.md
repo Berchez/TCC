@@ -3,7 +3,7 @@
 ---
 
 ## -:seedling: Introdução
-Esse repositório contém o código do **Gas Monitor Brazilian Amazon Rainforest (GAMBAR)**, um aplicativo web desenvolvido de 
+Esse repositório contém o código do **Gas Monitor Brazilian Amazon Rainforest (GAMBAR)**, um aplicativo web desenvolvido em 
 JavaScript utilizando o ecossistema **Google Earth Engine (GEE)**. 
 Ele foi desenvolvido como projeto de conclusão de curso por João Pedro Silva Bianco e Walter Felipe Divino Berchez, 
 estudantes da Universidade Federal de Alfenas (UNIFAL), sob a orientação do professor
