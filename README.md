@@ -2,7 +2,7 @@
 
 ---
 
-## -:seedling: Introdução
+## - :seedling: Introdução
 Esse repositório contém o código do **Gas Monitor Brazilian Amazon Rainforest (GAMBAR)**, um aplicativo web desenvolvido em 
 JavaScript utilizando o ecossistema **Google Earth Engine (GEE)**. 
 Ele foi desenvolvido como projeto de conclusão de curso por João Pedro Silva Bianco e Walter Felipe Divino Berchez, 
@@ -21,7 +21,7 @@ Esse repositório esta dividido em 6 partes:
 
 ---
 
-## -:leaves: Apresentação
+## - :leaves: Apresentação
 
 Apresentaremos o **GAMBAR**, um aplicativo web fácil de usar que não requer 
 conhecimentos prévios em programação ou ferramentas de software. Desenvolvido com base na ferramenta GEE, o GAMBAR 
@@ -38,7 +38,7 @@ Para acessar o site de apresentação, clique no link: [Site](https://gambar-lan
 [![Apresentação do GAMBAR](https://img.youtube.com/vi/nLPNVPtsYgc/0.jpg)](https://www.youtube.com/watch?v=nLPNVPtsYgc)
 ---
 
-## -:artificial_satellite:	Tecnologias utilizadas
+## - :artificial_satellite:	Tecnologias utilizadas
 
 Para o desenvolvimento do GAMBAR, utilizamos a linguagem de programação JavaScript em conjunto com a plataforma 
 GEE, que permite acesso a dados de satélite e mapas, além de ferramentas de processamento e 
@@ -47,7 +47,7 @@ com os datasets oriundos do **Sentinel-5P**.
 
 ---
 
-## -:man_technologist: Desenvolvimento
+## - :man_technologist: Desenvolvimento
 O desenvolvimento do GAMBAR foi realizado por uma equipe interdisciplinar composta por professores e alunos 
 dos cursos de geografia e ciência da computacao da **Universidade Federal de Alfenas (UNIFAL-MG)**. 
 A figura a seguir apresenta o fluxo principal de execução do GAMBAR. Conforme pode ser visualizado na figura, 
@@ -66,7 +66,7 @@ A delimitação de área pode ser feita de três maneiras:
 
 ---
 
-## -:open_mouth: Exemplo de uso
+## - :open_mouth: Exemplo de uso
 A Figura 1 mostra como o GAMBAR suporta as atividades de entrada de dados apresentadas no fluxo principal. 
 Conforme pode ser visto na Figura 1, o stakeholder está interessado no gás monóxido de carbono (parte superior da figura), 
 no intervalo entre janeiro de 2022 a janeiro de 2023 (parte central da figura) e no estado do Amazonas (AM - parte inferior da figura).   
@@ -96,7 +96,7 @@ Para executar o GAMBAR, primeiro deve copiar o código-fonte presente na pasta "
 
 ---
 
-## -:raising_hand_man: Colaboradores
+## - :raising_hand_man: Colaboradores
 
 <table>
   <tr>
